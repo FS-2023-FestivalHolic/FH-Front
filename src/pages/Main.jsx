@@ -1,5 +1,16 @@
+import styled from "styled-components";
+import Navigation from "../shared/Navigation";
+
 const Main = () => {
-    return <div>메인 페이지입니다.</div>;
-  };
+  return(
+    <Wrapper>
+      <Navigation />
+    </Wrapper>  
+  );
+};
   
-  export default Main;
+const Wrapper = styled.div`
+  max-width: 1075px;
+  margin: 0 auto;
+`;
+export default Main;
