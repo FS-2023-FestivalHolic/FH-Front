@@ -38,7 +38,6 @@ const User = () => {
 };
 
 const Wrapper = styled.div`
-  height: 993px;
   margin: 0;
   color: #666666;
 `;
@@ -52,7 +51,7 @@ const Title = styled.div`
   font-size: 30px;
   font-weight: 400;
   padding: 5px 0;
-  margin: 10px 0 30px;
+  margin: 10px 0;
 `;
 
 const TopSection = styled.div`
@@ -62,7 +61,7 @@ const TopSection = styled.div`
   background-color: #FFFFFF;
   padding: 33px;
   align-items: center;
-  margin-bottom: 60px;
+  margin: 30px 0;
 `;
 
 const UserContent = styled.div`
@@ -74,6 +73,7 @@ const LikeList = styled.div`
   max-width: 100%;
   justify-content:space-between;
   display: flex;
+  margin: 20px 0;
 `;
 
 const Name = styled.span`
