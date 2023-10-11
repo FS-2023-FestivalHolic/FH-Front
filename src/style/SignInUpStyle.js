@@ -53,11 +53,15 @@ export const SignForm = styled.form`
     align-items: center;
     margin: 1rem;
     .error{
+        width: 26rem;
         font-family: 'Noto Sans KR', sans-serif;
         font-size: 0.9rem;
         font-style: normal;
         font-weight: 500;
         color: #9B111E;
+        @media (max-width: 400px) {
+            width: 90%;
+        }
     }
 
     @media (max-width: 400px) {
