@@ -28,6 +28,7 @@ const Container = styled.div`
   font-weight: 700;
   background-color: #ffffff;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 5px 5px 0 0;
 `;
 
 const ItemImage = styled.img`
