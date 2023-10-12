@@ -17,7 +17,7 @@ const User = () => {
   return (
     <Wrapper>
       <GlobalStyle specialPage={isSpecialPage} />
-      <Container>
+      <RContainer>
         <Title>마이페이지</Title>
         <TopSection>
           <UserContent>
@@ -32,14 +32,19 @@ const User = () => {
             </StyledLink>
           ))}
         </LikeList>
-      </Container>
+      </RContainer>
     </Wrapper>
   );
 };
 
+// 공통된 스타일
 const Wrapper = styled.div`
   margin: 0;
   color: #666666;
+`;
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
 `;
 
 const Container = styled.div`
@@ -52,21 +57,38 @@ const Title = styled.div`
   font-weight: 400;
   padding: 5px 0;
   margin: 10px 0;
+
+  @media (max-width: 390px) {
+    width: 370px;
+    font-size: 20px;
+    padding: 2px 0;
+    margin: 12px auto;
+  }
 `;
 
 const TopSection = styled.div`
   display: flex;
   max-width: 100%;
-  height: 260px;
+  height: 194px;
   background-color: #FFFFFF;
   padding: 33px;
   align-items: center;
   margin: 30px 0;
+
+  @media (max-width: 390px) {
+    height: 84px;
+    padding: 16px;
+    margin: 32px 0;
+  }
 `;
 
 const UserContent = styled.div`
   font-size: 40px;
   align-items: baseline;
+
+  @media (max-width: 390px) {
+    font-size: 15px;
+  }
 `;
 
 const LikeList = styled.div`
@@ -74,6 +96,15 @@ const LikeList = styled.div`
   justify-content:space-between;
   display: flex;
   margin: 20px 0;
+
+  @media (max-width: 390px) {
+    width: 370px;
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    grid-gap: 8px;
+    margin: 14px auto;
+    object-fit: cover;
+  }
 `;
 
 const Name = styled.span`
@@ -81,10 +112,22 @@ const Name = styled.span`
   font-weight: 400;
   color: #7A7A7A;
   margin-right: 30px;
+
+  @media (max-width: 390px) {
+    font-size: 24px;
+    margin-right: 12px;
+  }
 `;
 
-const StyledLink = styled(Link)`
-  text-decoration: none;
+const RContainer = styled(Container)`
+  @media (max-width: 390px) {
+    width: 100%;
+  }
+
+  @media (min-width: 390px) and (max-width: 1080px) {
+    width: 100%;
+  }
 `;
+
 
 export default User;
