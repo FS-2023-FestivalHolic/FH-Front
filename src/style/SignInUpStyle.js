@@ -17,7 +17,7 @@ export const SignLayout = styled.div`
     }
 `
 export const SignHeader = styled.div`
-    margin-top: 2rem;
+    margin-top: 4rem;
     display: flex;
     flex-direction: column;
     align-items: center;
