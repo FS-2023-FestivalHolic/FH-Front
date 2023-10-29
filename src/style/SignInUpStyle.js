@@ -21,8 +21,8 @@ export const SignHeader = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    @media (max-width: 400px) {
-        margin-top: 4rem;
+    @media (max-width: 420px) {
+        margin-top: 20%;
     }
     .welcometext{
         font-family: 'Noto Sans KR', sans-serif;
@@ -31,7 +31,7 @@ export const SignHeader = styled.div`
         font-weight: 600;
         color: #000;
         margin: 0.5rem;
-        @media (max-width: 400px) {
+        @media (max-width: 420px) {
             font-size: 1.5rem;
         }
     }
@@ -40,7 +40,7 @@ export const SignHeader = styled.div`
         font-size: 0.9rem;
         font-style: normal;
         font-weight: 600;
-        @media (max-width: 400px) {
+        @media (max-width: 420px) {
             font-size: 0.7rem;
         }
     }
@@ -59,12 +59,12 @@ export const SignForm = styled.form`
         font-style: normal;
         font-weight: 500;
         color: #9B111E;
-        @media (max-width: 400px) {
+        @media (max-width: 420px) {
             width: 90%;
         }
     }
 
-    @media (max-width: 400px) {
+    @media (max-width: 420px) {
         width: 90%;
     }
 
@@ -77,7 +77,7 @@ export const SignLabel = styled.label`
     font-size: 0.9rem;
     font-style: normal;
     font-weight: 600;
-    @media (max-width: 400px) {
+    @media (max-width: 420px) {
         width: 90%;
     }
 `
@@ -88,7 +88,7 @@ export const SignInput = styled.input`
     border: 1px solid #666;
     margin: 0.4rem 0;
 
-    @media (max-width: 400px) {
+    @media (max-width: 420px) {
         width: 90%;
     }
 `
@@ -104,7 +104,7 @@ export const SignButton = styled.button`
     border: none;
     margin-top: 0.5rem;
 
-    @media (max-width: 400px) {
+    @media (max-width:420px) {
         width: 90%;
     }
 `

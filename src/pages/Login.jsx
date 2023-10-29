@@ -1,8 +1,12 @@
 import React from 'react'
 import {useForm} from 'react-hook-form';
 import * as s from '../style/SignInUpStyle';
+import axios from 'axios'; // axios를 임포트해야 합니다
+import { useCookies } from 'react-cookie'; // useCookies import
+import { useNavigate } from 'react-router';
 function Login() {
-
+  const navigate = useNavigate();
+  const [cookies, setCookie] = useCookies(['mySessionId']); // 세션 쿠키를 사용하기 위해 react-cookie의 useCookies 사용
   const {
     register,
     handleSubmit,
@@ -12,8 +16,25 @@ function Login() {
 
   const onSubmit = (data) => {
 
-    console.log(data);
-    reset();
+      console.log(data);
+      axios
+      .post('/api/login', data) // 로그인 API 엔드포인트로 POST 요청을 보냅니다.
+      .then((res) => {
+        // 서버에서 로그인 성공 메세지를 받으면
+        if (res.data.loginSuccess) {
+          // 서버에서 받은 세션 ID를 쿠키에 저장
+          setCookie('mySessionId', res.data.mySessionId, { path: '/' });
+          //쿠키 저장 완료되면, 로그인 성공하였으므로 메인페이지 이동 
+          navigate('/') 
+        } else {
+          // 로그인이 실패한 경우 에러 메시지를 처리할 수 있습니다.
+          console.log('로그인 실패');
+        }
+      })
+      .catch((error) => {
+        console.error('로그인 요청 오류:', error);
+      });
+      reset();
 }
   return (
     <s.SignLayout>
