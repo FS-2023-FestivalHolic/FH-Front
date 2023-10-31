@@ -94,7 +94,9 @@ const UserContent = styled.div`
 const LikeList = styled.div`
   max-width: 100%;
   justify-content:space-between;
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  grid-gap: 11px;
   margin: 20px 0;
 
   @media (max-width: 390px) {
