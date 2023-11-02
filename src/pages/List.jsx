@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import HashtagBox from "../components/HashtagBox";
 import BeerItem from "../components/BeerItem";
+import Navigation from "../shared/Navigation";
 import { Link } from "react-router-dom";
 
 const List = () => {
@@ -36,6 +37,7 @@ const List = () => {
 
   return (
     <Wrapper> 
+      <Navigation />
       <HashtagsContainer>
         {tags.map((tag, index) => (
           <div>
@@ -78,7 +80,6 @@ const HashtagsContainer = styled.div`
   color: #666;
   font-size: 15px;
   font-weight: 400;
-  margin-top: 30px;
 `;
 
 const HashTag = styled.span`
@@ -113,6 +114,7 @@ const ItemContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(4,1fr);
   grid-gap: 9px;
+  margin-bottom: 20px;
 `;
 
 export default List;
