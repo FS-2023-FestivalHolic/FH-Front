@@ -16,6 +16,7 @@ const HashtagBox = ({ tags, removeTag }) => {
 };
 
 const Container = styled.div`
+  height: 28px;
   margin-top: 20px;
   display: flex;
   flex-wrap: wrap;
