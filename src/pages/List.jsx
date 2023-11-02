@@ -30,6 +30,12 @@ const List = () => {
       </HashtagsContainer>
 
       <HashtagBox tags={selectTags} removeTag={removeTag} />
+      
+      <SortOptions>
+        <SortButton>가나다순</SortButton>
+        <Bar>|</Bar>
+        <SortButton>좋아요순</SortButton>
+      </SortOptions>
     </Wrapper>
   );
 };
@@ -55,5 +61,24 @@ const HashTag = styled.span`
   margin-right: 15px;
 `; 
 
+const SortOptions = styled.div`
+  display: flex;
+  margin: 20px 0 30px;
+  justify-content: flex-end;
+`;
+
+const SortButton = styled.button`
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 400;
+  color: #666666B0;
+`;
+
+const Bar = styled.span`
+  color: #666666B0;
+  margin: 0 12px;
+`;
 
 export default List;
