@@ -19,20 +19,20 @@ function Detail() {
 
   const [data, setData] = useState(beerData[beerId-1]);
   const [contents, setContents] = useState([]);
-  useEffect(()=>{
-    // setData(beerData[beerId-1]);
-    // axios.get("http://localhost:4000/contents")
-    // .then((res)=>{
-    //   return res.data;
-    // })
-    // .then(data=>{
-    //   setContents(data);
-    //   console.log(data);
-    // })
-    // .catch((error)=>{
-    //   console.error('API 호출 중 에러 발생:', error);
-    // })
-  }, []);
+  // useEffect(()=>{
+  //   setData(beerData[beerId-1]);
+  //   axios.get("http://localhost:4000/contents")
+  //   .then((res)=>{
+  //     return res.data;
+  //   })
+  //   .then(data=>{
+  //     setContents(data);
+  //     console.log(data);
+  //   })
+  //   .catch((error)=>{
+  //     console.error('API 호출 중 에러 발생:', error);
+  //   })
+  // }, []);
 
 
   return (
