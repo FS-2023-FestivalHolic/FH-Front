@@ -103,6 +103,9 @@ export const SignButton = styled.button`
     font-size: 0.9rem;
     border: none;
     margin-top: 0.5rem;
+    &:hover {
+        background: #48515B;
+    }
 
     @media (max-width:420px) {
         width: 90%;

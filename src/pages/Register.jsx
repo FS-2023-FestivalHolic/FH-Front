@@ -1,6 +1,12 @@
 import React, {useState, useEffect} from 'react'
 import {useForm} from 'react-hook-form';
 import * as s from '../style/SignInUpStyle';
+import { useNavigate } from 'react-router';
+import axios from 'axios';
+
+const api = axios.create({
+  baseURL: 'http://3.34.177.220:8083', 
+});
 function Register() {
 
   const {
@@ -10,11 +16,23 @@ function Register() {
     reset
   } = useForm();
 
-  const onSubmit = (data) => {
+  const navigate = useNavigate();
 
+  //회원가입 폼 제출 
+  const onSubmit = async (data) => {
+    try {
+      const response = await api.post('/api/users/sign-up', data);
+      if (response.data.status=="SUCCESS") {
+        console.log(response.data.status);
+        alert('회원가입 성공! 로그인을 진행해주세요')
+        navigate('/login');
+      }
+    } catch (error) {
+      console.log('API 호출 중 에러 발생:', error.response.data);
+    }
       console.log(data);
-      reset();
   }
+
   return (
     <s.SignLayout>
       <s.SignHeader>
@@ -25,8 +43,8 @@ function Register() {
 
       <s.SignForm onSubmit={handleSubmit(onSubmit)}>
         <s.SignLabel>아이디</s.SignLabel>
-        <s.SignInput type="text" name="uid" placeholder='4~15자 이내로 작성해주세요' 
-        {...register("uid", {required: '아이디를 입력하세요', 
+        <s.SignInput type="text" name="loginId" placeholder='4~15자 이내로 작성해주세요' 
+        {...register("loginId", {required: '아이디를 입력하세요', 
               minLength: { value: 4, message: '최소 4자 이상이어야 합니다.',
               maxLength: { value: 15, message: '최대 15자까지 입력 가능합니다.'}}})}/>
         {errors.uid && <span className="error">{errors.uid.message}</span>}
@@ -61,8 +79,8 @@ function Register() {
         {errors.name && <span className="error">{errors.name.message}</span>}
         
         <s.SignLabel>닉네임</s.SignLabel>
-        <s.SignInput type="text" name="nickname" placeholder='별명을 알파벳, 한글, 숫자 20자 이하로 작성해주세요'
-         {...register('nickname', {
+        <s.SignInput type="text" name="nickName" placeholder='별명을 알파벳, 한글, 숫자 20자 이하로 작성해주세요'
+         {...register('nickName', {
           required: '닉네임을 입력하세요',
           maxLength: { value: 20, message: '최대 20자까지 입력 가능합니다.'}
         })}/>
