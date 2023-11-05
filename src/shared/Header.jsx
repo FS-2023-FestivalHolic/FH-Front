@@ -4,20 +4,44 @@ import {FiSearch} from 'react-icons/fi';
 import {AiOutlineUser} from 'react-icons/ai';
 import logoutImg from '../assets/logout.png';
 import instaImg from '../assets/instagram.png';
-import {Link} from 'react-router-dom';
+import {Link, useLocation} from 'react-router-dom';
 import{RxHamburgerMenu} from 'react-icons/rx';
 import MobileMenu from '../components/MobileMenu';
+import axios from 'axios'; 
+import { useCookies } from 'react-cookie';
+import { useNavigate } from 'react-router-dom';
 
-function Header() {
+const api = axios.create({
+  baseURL: 'http://3.34.177.220:8083', 
+});
+
+function Header(props) {
   //로그인 상태 변수 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const {isLogin} = props; //사용자가 로그인한 상태인지 props로 받아오기 
+
   const [mobileVisible, setMobileVisible] = useState(false);
+
   //userId 가져오기 
   const userId = 1;
 
-  //로그아웃 핸들러
-  const handleLogout = () => {
+  const [cookies, setCookie, removeCookie] = useCookies(['sessionId']); //쿠키 훅은 꼭 이렇게 사용해야함 
 
+  const navigate = useNavigate();
+
+  //로그아웃 핸들러
+  const handleLogout = async() => {
+    try {
+      const response = await api.get('/api/users/logout');
+
+      if (response.data.status=="SUCCESS") {
+        console.log(response.data.status);
+         //쿠키 삭제
+        navigate('/');
+        removeCookie('sessionId');
+      }
+    } catch (error) {
+      console.log('API 호출 중 에러 발생:', error);
+    }
   }
 
   //모바일 메뉴 렌더링 
@@ -25,7 +49,18 @@ function Header() {
     setMobileVisible(!mobileVisible);
   }
 
-  if(window.location.pathname === '/login'||window.location.pathname === '/register') return null
+  const handleMyPage = () =>{
+    if(!isLogin){
+      alert('로그인 후 마이페이지 접속 가능합니다.')
+    }
+  }
+
+  //login, register 경로일 때는 Header 안보이게 처리 
+  const location = useLocation();
+  const hideHeader = ['/login', '/register'].includes(location.pathname);
+  if (hideHeader){
+    return null;
+  }
   return (
     <div>
     <WebLayout>
@@ -37,10 +72,11 @@ function Header() {
           <img src={instaImg} className='icon' width={28}/>
         </a>
         <FiSearch className='icon' size={27}/>
-        <Link style={{textDecoration: 'none'}}to={`/${userId}`}>
+        <Link style={{textDecoration: 'none'}} onClick={handleMyPage}to={isLogin? `/${userId}`:'/login'}>
           <AiOutlineUser className='icon' size={30}/>
         </Link>
-        {isLoggedIn && ( // isLoggedIn이 true일 때만 로그아웃 버튼을 렌더링
+
+        {isLogin && ( // isLoggedIn이 true일 때만 로그아웃 버튼을 렌더링
           <img onClick={handleLogout} src={logoutImg} className='icon' width={25}/>
         )}
        </RightLayout>
@@ -51,7 +87,7 @@ function Header() {
         <Logo src='/FH_logo.png' width={80} ></Logo>
       </Link>
       <RxHamburgerMenu className='menuIcon' size={27} onClick={handleMobileMenu}></RxHamburgerMenu>
-      {mobileVisible && <MobileMenu mobileVisible={setMobileVisible} loggedin={isLoggedIn} userId={userId}/>}
+      {mobileVisible && <MobileMenu mobileVisible={setMobileVisible} isLogin={isLogin} userId={userId} handleLogout={handleLogout}/>}
      </MobileLayout>
     </div>
   )

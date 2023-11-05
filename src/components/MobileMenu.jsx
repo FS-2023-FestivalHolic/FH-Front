@@ -5,13 +5,15 @@ import { NavLink} from 'react-router-dom'
 
 function MobileMenu(props) {
     const {mobileVisible} = props;
-    const {loggedin} = props;
+    const {isLogin} = props;
     const {userId} = props;
 
     const closeMenu = () =>{
         mobileVisible(false);
 
     }
+
+    
     return (
         <Layout>
             <MenuContainer>
@@ -21,12 +23,12 @@ function MobileMenu(props) {
                 </Header>
                 <StyledLink onClick={closeMenu} to='/'>Main</StyledLink>
                 <StyledLink onClick={closeMenu} to='/beer'>수제맥주</StyledLink>
-                {loggedin && <StyledLink onClick={closeMenu} to={`/${userId}`}>마이페이지</StyledLink>}
+                {isLogin && <StyledLink onClick={closeMenu} to={`/${userId}`}>마이페이지</StyledLink>}
                 <hr className='line'/>
         
-                {loggedin ? (
+                {isLogin ? (
                     <ButtonContainer>
-                        <NavLink className='button_link' style={{background:'#FFF', color: '#000'}}>로그아웃</NavLink>
+                        <NavLink className='button_link' style={{background:'#FFF', color: '#000'}} onClick={props.handleLogout}>로그아웃</NavLink>
                     </ButtonContainer>
 
                 )
