@@ -1,18 +1,25 @@
 {
-    "contents":[{
-        "style": "title",
-        "content": "첫즙라거는?"
-    },{
-        "style": "description",
-        "content":"맥주업계 최고의 히트작이라고도 할 수 있는 라거는 전세계적으로 가장 흔히 접할 수 있는 맥주입니다. "
-    },{
-        "style": "description",
-        "content": "청량하고 맑은 황금빛의 라거는 누구나 좋아하는 맥주입니다.첫즙라거는 시원하고 청량한 라거를 좋아하시는 분들중 조금 더 고급스러운 라거맥주를 원하시는 분께 알맞은 맥주입니다."
-    },{
-        "style": "title",
-        "content": "첫즙라거의 특징"
+    "detail": {
+        "beerId": 1,
+        "beerName": "wheat beer",
+        "introduction": "소개 내용",
+        "beerContentList": [
+            {
+                "subject": "수제맥주",
+                "description": "수제맥주에 대해 소개하는 글"
+            },
+            {
+                "subject": "수제맥주의 특징",
+                "description": "맑은 황금빛 color\n첫번째 맥아즙의 풍부한 맛과향\n부드럽고 중후한 느낌의 바디\n질리지 않는 상쾌한 탄산감과 깔끔한 맛"
+            }
+        ],
+        "hashTagNames": [
+            "달달함",
+            "부드러움",
+            "상큼함"
+        ],
+        "imageUrl": "https://fh-image-bucket.s3.ap-northeast-2.amazonaws.com/1_image.png"
     }
-]
 ,
     "users":[{
         "id": 1
