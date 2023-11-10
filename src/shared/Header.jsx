@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import styled from 'styled-components';
 import {FiSearch} from 'react-icons/fi';
 import {AiOutlineUser} from 'react-icons/ai';
@@ -8,7 +8,7 @@ import {Link, useLocation} from 'react-router-dom';
 import{RxHamburgerMenu} from 'react-icons/rx';
 import MobileMenu from '../components/MobileMenu';
 import axios from 'axios'; 
-import { useCookies } from 'react-cookie';
+import { removeCookie } from '../cookies';
 import { useNavigate } from 'react-router-dom';
 
 const api = axios.create({
@@ -17,14 +17,12 @@ const api = axios.create({
 
 function Header(props) {
   //로그인 상태 변수 
-  const {isLogin} = props; //사용자가 로그인한 상태인지 props로 받아오기 
-
+  const {isLogin, onLogout} = props;
+  
   const [mobileVisible, setMobileVisible] = useState(false);
 
   //userId 가져오기 
   const userId = 1;
-
-  const [cookies, setCookie, removeCookie] = useCookies(['sessionId']); //쿠키 훅은 꼭 이렇게 사용해야함 
 
   const navigate = useNavigate();
 
@@ -36,8 +34,9 @@ function Header(props) {
       if (response.data.status=="SUCCESS") {
         console.log(response.data.status);
          //쿠키 삭제
-        navigate('/');
         removeCookie('sessionId');
+        onLogout(); //로그아웃 핸들러 호출 
+        navigate('/')
       }
     } catch (error) {
       console.log('API 호출 중 에러 발생:', error);
@@ -72,12 +71,13 @@ function Header(props) {
           <img src={instaImg} className='icon' width={28}/>
         </a>
         <FiSearch className='icon' size={27}/>
-        <Link style={{textDecoration: 'none'}} onClick={handleMyPage}to={isLogin? `/${userId}`:'/login'}>
+        <Link style={{textDecoration: 'none'}} onClick={handleMyPage}to={isLogin? `/${userId}`:'/login'}> 
           <AiOutlineUser className='icon' size={30}/>
         </Link>
 
         {isLogin && ( // isLoggedIn이 true일 때만 로그아웃 버튼을 렌더링
-          <img onClick={handleLogout} src={logoutImg} className='icon' width={25}/>
+          <img onClick={handleLogout} src={logoutImg} className='icon' width={25} style={{ display: isLogin ? 'inline-block' : 'none' }} // 로그인 상태일 때만 표시
+          />
         )}
        </RightLayout>
     </WebLayout>

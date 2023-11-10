@@ -10,58 +10,99 @@ import * as d from '../style/DetailPageStyle';
 import axios from 'axios';
 
 import {google_api_key}from '../PersonalData'
-
+import { useNavigate } from 'react-router-dom';
+import { getCookie } from '../cookies';
 const api = axios.create({
   baseURL: 'http://3.34.177.220:8083', 
 });
 
-function Detail() {
-  
+
+function Detail(props) {
+  const {isLogin} = props;
   const beerId = useParams().detailid; //App.js 라우트 파라미터에 있는 detailid를 가져옴 
- 
 
   const [beerdata, setBeerData] = useState([]);
   const [contents, setContents] = useState([]);
   const [Likes, setLikes] = useState(0) //좋아요 수를 담기 위한 변수 
   const [LikeAction, setLikeAction] = useState(null) //이미 좋아요를 눌렀을 시 상태를 표시하기 위한 변수 
 
- 
+ const navigate = useNavigate();
+
   useEffect(()=>{
     async function fetchBeerData() {
       try {
-        // const response = await axios.get("http://localhost:4000/detail"); 
         const response = await api.get(`/api/beers/${beerId}`);
         if (response) {
           console.log(response.data.message);
+          console.log(getCookie('sessionId'));
           setBeerData(response.data.data);
           setContents(response.data.data.beerContentList);
+   
         }
       } catch (error) {
         console.error('API 호출 중 에러 발생:', error);
       }
     
     }
+
+   
     fetchBeerData();
+
   }, []);
+
+  // useEffect(()=>{
+  //   async function setMyLike(){
+  //     console.log(cookies.sessionId);
+  //     try {
+
+  //       const response = await api.get(`/api/likes/beers/${beerId}`,{
+  //         headers: {sessionId: cookies.sessionId}
+  //       });
+  //       if (response.data.message=="이미 좋아요 상태입니다.") {
+  //         setLikeAction('liked');
+  //       }
+  //     } catch (error) {
+  //       console.error('API 호출 중 에러 발생:', error);
+  //     }
+
+  //   }
+  //   setMyLike();
+  // },[]);
 
   if (beerdata.length === 0) {
     return <div>Loading...</div>; // 데이터 로딩 중일 때 로딩 스피너 등을 표시
   }
 
   //좋아요 기능 처리 
-  const onLike = () => {
+  const onLike = async () => {
     console.log('좋아요')
-
+    if(!isLogin){ //로그인 되어 있지 않은 경우 
+      alert('로그인 먼저 해주세요.');
+      navigate('/login');
+      
+    }else{
     if(LikeAction === null){
         //Like 버튼이 클릭이 안되어 있을 때 버튼을 누르면 좋아요 수 1 증가 
-        setLikes(Likes+1);
-        setLikeAction('liked')
+        try{
+        const response = await api.get(`/api/likes/beers/${beerId}`,{
+          headers:{'sessionId': getCookie('sessionId')},
+          withCredentials: true
+        });
+        console.log(response);
+        // if(response.data.status=="SUCCESS"){
+        //   setLikes(Likes+1);
+        //   setLikeAction('liked')
+        // }
+       
+      }catch (error) {
+        console.log('API 호출 중 에러 발생:', error.response);
+      }
               
     }else{
-        //Like 버튼이 클릭이 되어 있을 때 버튼을 누르면 좋아요 수 1 감소
-        setLikes(Likes-1);
-        setLikeAction(null)
+        //Like 버튼이 클릭이 되어 있을 때 버튼을 누르면 이미 좋아요를 눌렀다고 표시 
+        alert("이미 좋아요를 눌렀어요!")
     }
+  }
 }
   return (
     <d.DetailLayout>
@@ -108,7 +149,7 @@ function Detail() {
       {/*상품상세설명 부분*/}
       <d.ContentWrapper>
       {contents  && contents.map((content, index)=>(
-        <div>
+        <div key={index}>
         <p className='title'>{content.subject}</p>
         <p className='description'>{content.description}</p>
  

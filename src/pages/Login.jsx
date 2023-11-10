@@ -2,17 +2,16 @@ import React from 'react'
 import {useForm} from 'react-hook-form';
 import * as s from '../style/SignInUpStyle';
 import axios from 'axios'; 
-import { useCookies } from 'react-cookie'; 
 import { useNavigate } from 'react-router';
-
-
+import { setCookie } from '../cookies';
 const api = axios.create({
   baseURL: 'http://3.34.177.220:8083', 
 });
 
-function Login() {
+function Login(props) {
+  const {onLogin} = props;
   const navigate = useNavigate();
-  const [cookies, setCookie] = useCookies(['sessionId']); // 세션 쿠키를 사용하기 위해 react-cookie의 useCookies 사용
+
   const {
     register,
     handleSubmit,
@@ -23,12 +22,13 @@ function Login() {
     console.log(data);
     try {
       const response = await api.post('/api/users/login', data);
-      if (response.data.status=="SUCCESS") {
+      if (response.data.status==="SUCCESS") {
         console.log(response.data.status);
          // 서버에서 받은 세션 ID를 쿠키에 저장
-         setCookie('sessionId', response.data.data.sessionId, {path: '/'});
+         setCookie('sessionId', response.data.data.sessionId, {path: '/' });
          console.log(response.data.data.sessionId);
-         console.log(cookies.sessionId);
+         onLogin(); //로그인 핸들러 호출
+
          //쿠키 저장 완료되면, 로그인 성공하였으므로 메인페이지 이동 
          navigate('/') 
       }
