@@ -17,12 +17,14 @@ function Login() {
     register,
     handleSubmit,
     formState: {  errors },
+    reset
   } = useForm();
 
   const onSubmit = async (data) => {
     console.log(data);
     try {
       const response = await api.post('/api/users/login', data);
+      console.log(response.data.data.status);
       if (response.data.status=="SUCCESS") {
         console.log(response.data.status);
          // 서버에서 받은 세션 ID를 쿠키에 저장
@@ -33,7 +35,10 @@ function Login() {
          navigate('/') 
       }
     } catch (error) {
-      console.log('API 호출 중 에러 발생:', error.response);
+      if(error.response.data.status==500){ //아이디, 비밀번호가 틀렸을 때 
+          alert(error.response.data.message);
+          reset();
+      }
     }
 
       

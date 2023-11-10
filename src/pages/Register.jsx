@@ -28,9 +28,12 @@ function Register() {
         navigate('/login');
       }
     } catch (error) {
+      if(error.response.data.code==423){
+        alert(error.response.data.message);
+        reset();
+      }
       console.log('API 호출 중 에러 발생:', error.response.data);
     }
-      console.log(data);
   }
 
   return (
@@ -79,8 +82,8 @@ function Register() {
         {errors.name && <span className="error">{errors.name.message}</span>}
         
         <s.SignLabel>닉네임</s.SignLabel>
-        <s.SignInput type="text" name="nickName" placeholder='별명을 알파벳, 한글, 숫자 20자 이하로 작성해주세요'
-         {...register('nickName', {
+        <s.SignInput type="text" name="nickname" placeholder='별명을 알파벳, 한글, 숫자 20자 이하로 작성해주세요'
+         {...register('nickname', {
           required: '닉네임을 입력하세요',
           maxLength: { value: 20, message: '최대 20자까지 입력 가능합니다.'}
         })}/>
