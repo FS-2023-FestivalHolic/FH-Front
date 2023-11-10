@@ -6,6 +6,7 @@ export default function Navigation() {
     <Nav>
       <StyledLink to="/">Main</StyledLink>
       <StyledLink to="/beer">수제맥주</StyledLink>
+      <StyledLink to="/test">맥주 테스트</StyledLink>
   </Nav>
   );
 };
