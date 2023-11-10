@@ -9,7 +9,7 @@ import Cart from '../assets/cart.png'
 import * as d from '../style/DetailPageStyle';
 import axios from 'axios';
 
-import {google_api_key}from '../PersonalData'
+// import {google_api_key}from '../PersonalData'
 
 const api = axios.create({
   baseURL: 'http://3.34.177.220:8083', 
@@ -73,7 +73,7 @@ function Detail() {
             <span className='detailinfo'>{beerdata.introduction}</span>
             {/*구글맵 부분*/}
             <span className='location_text'>위치</span>
-            <Wrapper apiKey={google_api_key}>
+            <Wrapper apiKey={"AIzaSyBVukbpmEsDRTQh0e2JkFKgDIa8PrDZr_8"}>
               <RenderMap/>
             </Wrapper>
 
