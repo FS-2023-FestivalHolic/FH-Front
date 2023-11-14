@@ -2,14 +2,50 @@ import React from 'react'
 import styled from 'styled-components'
 import {IoCloseOutline} from 'react-icons/io5'
 import { NavLink} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { getCookie } from '../cookies'
+import axios from 'axios'
 
+const api = axios.create({
+    baseURL: 'http://3.34.177.220:8083', 
+    headers: { "Content-type": "application/json" }, // data type
+  });
 function MobileMenu(props) {
     const {mobileVisible} = props;
     const {isLogin} = props;
     const {userId} = props;
+    const navigate = useNavigate();
 
     const closeMenu = () =>{
         mobileVisible(false);
+
+    }
+
+    const handleMobileMy =  async () =>{
+        if(!isLogin){
+            alert('로그인 후 마이페이지 접속 가능합니다.')
+            navigate('/login')
+          }else{
+      
+            try{
+              const response = await api.get('/api/users',{
+                headers:{'Accesstoken': getCookie('accessToken')},
+                withCredentials: true
+              });
+      
+              console.log(response);
+              if(response.data.status=="SUCCESS"){
+                console.log(response.data.message);
+                        
+                navigate(`/${response.data.data.userId}`, {state:{userData: response.data.data}});
+                mobileVisible(false);
+              }
+          
+            }catch (error) {
+              console.log('API 호출 중 에러 발생:', error.response);
+            }
+                 
+          }
 
     }
 
@@ -23,7 +59,7 @@ function MobileMenu(props) {
                 </Header>
                 <StyledLink onClick={closeMenu} to='/'>Main</StyledLink>
                 <StyledLink onClick={closeMenu} to='/beer'>수제맥주</StyledLink>
-                {isLogin && <StyledLink onClick={closeMenu} to={`/${userId}`}>마이페이지</StyledLink>}
+                {isLogin && <StyledLink onClick={handleMobileMy} >마이페이지</StyledLink>}
                 <hr className='line'/>
         
                 {isLogin ? (

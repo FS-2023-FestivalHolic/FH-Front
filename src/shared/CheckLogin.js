@@ -1,10 +1,8 @@
-import {useCookies} from 'react-cookie';
+import { getCookie } from "../cookies";
 
 const CheckLogin = () => {
     //쿠키를 이용해 로그인 여부 판단 
-    const [cookies] = useCookies(['sessionId']);
-    
-    if(cookies.sessionId && cookies.sessionId !== "undefined"){
+    if(getCookie('accessToken') && getCookie('accessToken') !== "undefined"){
       return true;
     }else{
       return false;

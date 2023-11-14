@@ -9,59 +9,117 @@ import Cart from '../assets/cart.png'
 import * as d from '../style/DetailPageStyle';
 import axios from 'axios';
 
-// import {google_api_key}from '../PersonalData'
+
+
+import { useNavigate } from 'react-router-dom';
+import { getCookie } from '../cookies';
+
+
 
 const api = axios.create({
   baseURL: 'http://3.34.177.220:8083', 
 });
 
-function Detail() {
-  
+
+function Detail(props) {
+  const {isLogin} = props;
   const beerId = useParams().detailid; //App.js 라우트 파라미터에 있는 detailid를 가져옴 
- 
 
   const [beerdata, setBeerData] = useState([]);
   const [contents, setContents] = useState([]);
   const [Likes, setLikes] = useState(0) //좋아요 수를 담기 위한 변수 
   const [LikeAction, setLikeAction] = useState(null) //이미 좋아요를 눌렀을 시 상태를 표시하기 위한 변수 
 
- 
+ const navigate = useNavigate();
+
   useEffect(()=>{
     async function fetchBeerData() {
       try {
-        // const response = await axios.get("http://localhost:4000/detail"); 
         const response = await api.get(`/api/beers/${beerId}`);
         if (response) {
-          console.log(response.data.message);
+          console.log(response.data.data.likesCnt);
           setBeerData(response.data.data);
           setContents(response.data.data.beerContentList);
+          setLikes(response.data.data.likesCnt); //좋아요 수 세팅 
+   
         }
       } catch (error) {
         console.error('API 호출 중 에러 발생:', error);
       }
     
     }
+    async function setMyLike(){
+
+      try {
+
+        const response = await api.get(`/api/beers/${beerId}/likeStatus`,{
+          headers: {"Accesstoken": getCookie("accessToken")}
+        });
+        if (response.data.data.likeStatus) {
+          console.log(response.data.data.likeStatus);
+          setLikeAction('liked');
+        }
+      } catch (error) {
+        console.error('API 호출 중 에러 발생:', error);
+      }
+
+    }
+   
     fetchBeerData();
+    {isLogin && setMyLike()}; //나의 좋아요 세팅은 내가 로그인했을때만 실행 
+
   }, []);
+
 
   if (beerdata.length === 0) {
     return <div>Loading...</div>; // 데이터 로딩 중일 때 로딩 스피너 등을 표시
   }
 
   //좋아요 기능 처리 
-  const onLike = () => {
+  const onLike = async () => {
     console.log('좋아요')
-
+    if(!isLogin){ //로그인 되어 있지 않은 경우 
+      alert('로그인 먼저 해주세요.');
+      navigate('/login');
+      
+    }else{
     if(LikeAction === null){
-        //Like 버튼이 클릭이 안되어 있을 때 버튼을 누르면 좋아요 수 1 증가 
-        setLikes(Likes+1);
-        setLikeAction('liked')
+        // Like 버튼이 클릭이 안되어 있을 때 버튼을 누르면 좋아요 수 1 증가 
+        try{
+        const response = await api.get(`/api/likes/beers/${beerId}`,{
+          headers:{'Accesstoken': getCookie('accessToken')},
+          withCredentials: true
+        });
+        console.log(response);
+        if(response.data.status=="SUCCESS"){
+          setLikes(Likes+1);
+          setLikeAction('liked')
+        }
+    
+       
+      }catch (error) {
+        console.log('API 호출 중 에러 발생:', error.response);
+      }
               
     }else{
-        //Like 버튼이 클릭이 되어 있을 때 버튼을 누르면 좋아요 수 1 감소
-        setLikes(Likes-1);
-        setLikeAction(null)
+        //Like 버튼이 클릭이 되어 있을 때 버튼을 누르면 좋아요 취소
+        // try{
+        //   const response = await api.del(`/api/likes/beers/${beerId}`,{
+        //     headers:{'Accesstoken': getCookie('accessToken')},
+        //     withCredentials: true
+        //   });
+        //   console.log(response);
+        //   if(response.data.status=="SUCCESS"){
+        //     setLikes(Likes-1);
+        //     setLikeAction(null);
+        //   }
+      
+         
+        // }catch (error) {
+        //   console.log('API 호출 중 에러 발생:', error.response);
+        // }
     }
+  }
 }
   return (
     <d.DetailLayout>
@@ -108,7 +166,7 @@ function Detail() {
       {/*상품상세설명 부분*/}
       <d.ContentWrapper>
       {contents  && contents.map((content, index)=>(
-        <div>
+        <div key={index}>
         <p className='title'>{content.subject}</p>
         <p className='description'>{content.description}</p>
  

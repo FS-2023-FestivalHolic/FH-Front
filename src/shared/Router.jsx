@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { BrowserRouter, Routes, Route} from "react-router-dom";
 import {
     Main, List, Detail, Login, Register, User,
@@ -7,8 +8,16 @@ import CheckLogin from './CheckLogin';
 import { Navigate, Outlet } from 'react-router-dom';
 const Router = () => {
 
-    const isLogin = CheckLogin();
+    const [isLogin, setIsLogin] = useState(CheckLogin());
 
+    const handleLogin = () => {
+        setIsLogin(true);
+      };
+    
+    const handleLogout = () => {
+        setIsLogin(false);
+    };
+    
     //로그인한 회원은 들어갈 수 없는 페이지 
     const PublicRoute = () => {
         console.log("isLogin: ", isLogin);
@@ -23,20 +32,20 @@ const Router = () => {
 
     return (
         <BrowserRouter>
-            <Header isLogin={isLogin}/>
+            <Header isLogin={isLogin} onLogout={handleLogout}/>
             <Routes>
                 <Route element={<PrivateRoute />}>
                     <Route path="/:userid" element={<User />} />
                 </Route>
 
                 <Route element={<PublicRoute/>}>
-                    <Route path="/login" element={<Login />} />
+                    <Route path="/login" element={<Login onLogin={handleLogin}/>} />
                     <Route path="/register" element={<Register />} />
                 </Route>
 
                 <Route path="/" element={<Main />} />
                 <Route path="/beer" element={<List />} />
-                <Route path="/beer/:detailid" element={<Detail />} />
+                <Route path="/beer/:detailid" element={<Detail isLogin={isLogin}/>} />
             </Routes>
         </BrowserRouter>
     );
