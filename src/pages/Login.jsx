@@ -21,16 +21,20 @@ function Login(props) {
   const onSubmit = async (data) => {
     console.log(data);
     try {
-      const response = await api.post('/api/users/login', data);
+      const response = await api.post('/api/users/login', data, {withCredentials: true});
       if (response.data.status==="SUCCESS") {
         console.log(response.data.status);
-         // 서버에서 받은 세션 ID를 쿠키에 저장
-         setCookie('sessionId', response.data.data.sessionId, {path: '/' });
-         console.log(response.data.data.sessionId);
-         onLogin(); //로그인 핸들러 호출
+        const accessToken = response.data.data.accessToken;
 
-         //쿠키 저장 완료되면, 로그인 성공하였으므로 메인페이지 이동 
-         navigate('/') 
+        // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
+		    axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+        setCookie("accessToken", accessToken, {path: '/' });
+        
+        console.log(document.cookie);
+        onLogin(); //로그인 핸들러 호출
+
+        //쿠키 저장 완료되면, 로그인 성공하였으므로 메인페이지 이동 
+        navigate('/') 
       }
     } catch (error) {
       console.log('API 호출 중 에러 발생:', error.response);

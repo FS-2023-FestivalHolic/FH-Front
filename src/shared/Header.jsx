@@ -10,9 +10,10 @@ import MobileMenu from '../components/MobileMenu';
 import axios from 'axios'; 
 import { removeCookie } from '../cookies';
 import { useNavigate } from 'react-router-dom';
-
+import { getCookie } from '../cookies';
 const api = axios.create({
   baseURL: 'http://3.34.177.220:8083', 
+  headers: { "Content-type": "application/json" }, // data type
 });
 
 function Header(props) {
@@ -21,36 +22,53 @@ function Header(props) {
   
   const [mobileVisible, setMobileVisible] = useState(false);
 
-  //userId 가져오기 
-  const userId = 1;
+  const [userId, setUserId] = useState();
+
 
   const navigate = useNavigate();
 
-  //로그아웃 핸들러
-  const handleLogout = async() => {
-    try {
-      const response = await api.get('/api/users/logout');
 
-      if (response.data.status=="SUCCESS") {
-        console.log(response.data.status);
+  //로그아웃 핸들러
+  const handleLogout = () => {
          //쿠키 삭제
-        removeCookie('sessionId');
+        removeCookie('accessToken');
         onLogout(); //로그아웃 핸들러 호출 
         navigate('/')
-      }
-    } catch (error) {
-      console.log('API 호출 중 에러 발생:', error);
-    }
+    
   }
+
 
   //모바일 메뉴 렌더링 
   const handleMobileMenu =() =>{
     setMobileVisible(!mobileVisible);
   }
 
-  const handleMyPage = () =>{
+
+
+  const handleMyPage = async () =>{
     if(!isLogin){
       alert('로그인 후 마이페이지 접속 가능합니다.')
+      navigate('/login')
+    }else{
+
+      try{
+        const response = await api.get('/api/users',{
+          headers:{'Accesstoken': getCookie('accessToken')},
+          withCredentials: true
+        });
+
+        console.log(response);
+        if(response.data.status=="SUCCESS"){
+          console.log(response.data.message);
+          setUserId(response.data.data.userId);
+                  
+          navigate(`/${response.data.data.userId}`, {state:{userData: response.data.data}}); //마이페이지 이동시 state에 유저 데이터 담아서 보냄 
+        }
+    
+      }catch (error) {
+        console.log('API 호출 중 에러 발생:', error.response);
+      }
+           
     }
   }
 
@@ -71,9 +89,9 @@ function Header(props) {
           <img src={instaImg} className='icon' width={28}/>
         </a>
         <FiSearch className='icon' size={27}/>
-        <Link style={{textDecoration: 'none'}} onClick={handleMyPage}to={isLogin? `/${userId}`:'/login'}> 
-          <AiOutlineUser className='icon' size={30}/>
-        </Link>
+        {/* <Link style={{textDecoration: 'none'}} onClick={} to={isLogin? `/${userId}`:'/login'} state={{userData: userData}}>  */}
+          <AiOutlineUser style={{pointer: 'cursor'}}onClick={handleMyPage} className='icon' size={30}/>
+        {/* </Link> */}
 
         {isLogin && ( // isLoggedIn이 true일 때만 로그아웃 버튼을 렌더링
           <img onClick={handleLogout} src={logoutImg} className='icon' width={25} style={{ display: isLogin ? 'inline-block' : 'none' }} // 로그인 상태일 때만 표시

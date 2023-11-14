@@ -119,7 +119,10 @@ export const Line = styled.hr`
 `
 
 export const ContentWrapper = styled.div`
+@media (max-width: 420px) {
+  margin-bottom: 5rem;
 
+}
   .title{
     color: #000;
     font-family: Noto Sans KR;
@@ -145,6 +148,7 @@ export const ContentWrapper = styled.div`
 
     @media (max-width: 420px) {
       font-size:14px;
+  
     }
   }
 `

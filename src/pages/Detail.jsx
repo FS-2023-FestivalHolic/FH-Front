@@ -33,10 +33,10 @@ function Detail(props) {
       try {
         const response = await api.get(`/api/beers/${beerId}`);
         if (response) {
-          console.log(response.data.message);
-          console.log(getCookie('sessionId'));
+          console.log(response.data.data.likesCnt);
           setBeerData(response.data.data);
           setContents(response.data.data.beerContentList);
+          setLikes(response.data.data.likesCnt); //좋아요 수 세팅 
    
         }
       } catch (error) {
@@ -44,30 +44,28 @@ function Detail(props) {
       }
     
     }
+    async function setMyLike(){
 
+      try {
+
+        const response = await api.get(`/api/beers/${beerId}/likeStatus`,{
+          headers: {"Accesstoken": getCookie("accessToken")}
+        });
+        if (response.data.data.likeStatus) {
+          console.log(response.data.data.likeStatus);
+          setLikeAction('liked');
+        }
+      } catch (error) {
+        console.error('API 호출 중 에러 발생:', error);
+      }
+
+    }
    
     fetchBeerData();
+    {isLogin && setMyLike()}; //나의 좋아요 세팅은 내가 로그인했을때만 실행 
 
   }, []);
 
-  // useEffect(()=>{
-  //   async function setMyLike(){
-  //     console.log(cookies.sessionId);
-  //     try {
-
-  //       const response = await api.get(`/api/likes/beers/${beerId}`,{
-  //         headers: {sessionId: cookies.sessionId}
-  //       });
-  //       if (response.data.message=="이미 좋아요 상태입니다.") {
-  //         setLikeAction('liked');
-  //       }
-  //     } catch (error) {
-  //       console.error('API 호출 중 에러 발생:', error);
-  //     }
-
-  //   }
-  //   setMyLike();
-  // },[]);
 
   if (beerdata.length === 0) {
     return <div>Loading...</div>; // 데이터 로딩 중일 때 로딩 스피너 등을 표시
@@ -82,25 +80,40 @@ function Detail(props) {
       
     }else{
     if(LikeAction === null){
-        //Like 버튼이 클릭이 안되어 있을 때 버튼을 누르면 좋아요 수 1 증가 
+        // Like 버튼이 클릭이 안되어 있을 때 버튼을 누르면 좋아요 수 1 증가 
         try{
         const response = await api.get(`/api/likes/beers/${beerId}`,{
-          headers:{'sessionId': getCookie('sessionId')},
+          headers:{'Accesstoken': getCookie('accessToken')},
           withCredentials: true
         });
         console.log(response);
-        // if(response.data.status=="SUCCESS"){
-        //   setLikes(Likes+1);
-        //   setLikeAction('liked')
-        // }
+        if(response.data.status=="SUCCESS"){
+          setLikes(Likes+1);
+          setLikeAction('liked')
+        }
+    
        
       }catch (error) {
         console.log('API 호출 중 에러 발생:', error.response);
       }
               
     }else{
-        //Like 버튼이 클릭이 되어 있을 때 버튼을 누르면 이미 좋아요를 눌렀다고 표시 
-        alert("이미 좋아요를 눌렀어요!")
+        //Like 버튼이 클릭이 되어 있을 때 버튼을 누르면 좋아요 취소
+        // try{
+        //   const response = await api.del(`/api/likes/beers/${beerId}`,{
+        //     headers:{'Accesstoken': getCookie('accessToken')},
+        //     withCredentials: true
+        //   });
+        //   console.log(response);
+        //   if(response.data.status=="SUCCESS"){
+        //     setLikes(Likes-1);
+        //     setLikeAction(null);
+        //   }
+      
+         
+        // }catch (error) {
+        //   console.log('API 호출 중 에러 발생:', error.response);
+        // }
     }
   }
 }
