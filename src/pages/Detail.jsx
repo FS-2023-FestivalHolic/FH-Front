@@ -1,201 +1,198 @@
-import React,{useState, useEffect, useRef} from 'react'
+import React,{useState, useEffect} from 'react'
 import Navigation from '../shared/Navigation'
-import styled from 'styled-components'
 import {useParams} from 'react-router-dom'
 import { Wrapper} from "@googlemaps/react-wrapper";
 import RenderMap from '../components/RenderMap';
-import LikeDislikes from '../components/LikeDislikes';
+import LikeFilled from "../assets/heart.png";
+import LikeOutlined from "../assets/nolike.png";
+import Cart from '../assets/cart.png'
+import * as d from '../style/DetailPageStyle';
 import axios from 'axios';
-function Detail() {
-  
-  const beerId = useParams().detailid; //App.js 라우트 파라미터에 있는 detailid를 가져옴 
-  const beerData = [
-    {id: 1, image: require('../assets/FirstJuiceLarger.png'), name: '첫즙라거', explanation: '첫번 맥즙의 깊고 풍부한 맛과 극강의 부드러움을 가진 라거!', like: 5, tags: ['달달함', '부드러움']}, 
-    {id: 2, image: require('../assets/LemonRamalade.png'), name: '레몬라말레이드', explanation: '청량함과 레몬의 은은함을 느낄수 있는 라거', like: 22, tags: ['달달함', '부드러움']},
-    {id: 3, image: require('../assets/LargerOnTheBeach.png'), name: '라거 온 더 비치',explanation: '청량함과 레몬의 은은함을 느낄수 있는 라거', like: 5, tags: ['달달함', '부드러움']},
-    {id: 4, image: require('../assets/DarkLarger.png'), name: '다크 라거', explanation: '청량함과 레몬의 은은함을 느낄수 있는 라거', like: 22, tags: ['달달함', '부드러움', '쓴맛']},
-  ]; 
-  console.log(beerId);
 
-  const [data, setData] = useState(beerData[beerId-1]);
+
+
+import { useNavigate } from 'react-router-dom';
+import { getCookie } from '../cookies';
+
+
+
+const api = axios.create({
+  baseURL: 'http://3.34.177.220:8083', 
+});
+
+
+function Detail(props) {
+  const {isLogin} = props;
+  const beerId = useParams().detailid; //App.js 라우트 파라미터에 있는 detailid를 가져옴 
+
+  const [beerdata, setBeerData] = useState([]);
   const [contents, setContents] = useState([]);
+  const [Likes, setLikes] = useState(0) //좋아요 수를 담기 위한 변수 
+  const [LikeAction, setLikeAction] = useState(null) //이미 좋아요를 눌렀을 시 상태를 표시하기 위한 변수 
+
+ const navigate = useNavigate();
+
   useEffect(()=>{
-    // setData(beerData[beerId-1]);
-    // axios.get("http://localhost:4000/contents")
-    // .then((res)=>{
-    //   return res.data;
-    // })
-    // .then(data=>{
-    //   setContents(data);
-    //   console.log(data);
-    // })
-    // .catch((error)=>{
-    //   console.error('API 호출 중 에러 발생:', error);
-    // })
+    async function fetchBeerData() {
+      try {
+        const response = await api.get(`/api/beers/${beerId}`);
+        if (response) {
+          console.log(response.data.data.likesCnt);
+          setBeerData(response.data.data);
+          setContents(response.data.data.beerContentList);
+          setLikes(response.data.data.likesCnt); //좋아요 수 세팅 
+   
+        }
+      } catch (error) {
+        console.error('API 호출 중 에러 발생:', error);
+      }
+    
+    }
+    async function setMyLike(){
+
+      try {
+
+        const response = await api.get(`/api/beers/${beerId}/likeStatus`,{
+          headers: {"Accesstoken": getCookie("accessToken")}
+        });
+        if (response.data.data.likeStatus) {
+          console.log(response.data.data.likeStatus);
+          setLikeAction('liked');
+        }
+      } catch (error) {
+        console.error('API 호출 중 에러 발생:', error);
+      }
+
+    }
+   
+    fetchBeerData();
+    {isLogin && setMyLike()}; //나의 좋아요 세팅은 내가 로그인했을때만 실행 
+
   }, []);
 
 
+  if (beerdata.length === 0) {
+    return <div>Loading...</div>; // 데이터 로딩 중일 때 로딩 스피너 등을 표시
+  }
+
+  //좋아요 기능 처리 
+  const onLike = async () => {
+    console.log('좋아요')
+    if(!isLogin){ //로그인 되어 있지 않은 경우 
+      alert('로그인 먼저 해주세요.');
+      navigate('/login');
+      
+    }else{
+    if(LikeAction === null){
+        // Like 버튼이 클릭이 안되어 있을 때 버튼을 누르면 좋아요 수 1 증가 
+        try{
+        const response = await api.get(`/api/likes/beers/${beerId}`,{
+          headers:{'Accesstoken': getCookie('accessToken')},
+          withCredentials: true
+        });
+        console.log(response);
+        if(response.data.status=="SUCCESS"){
+          setLikes(Likes+1);
+          setLikeAction('liked')
+        }
+    
+       
+      }catch (error) {
+        console.log('API 호출 중 에러 발생:', error.response);
+      }
+              
+    }else{
+        //Like 버튼이 클릭이 되어 있을 때 버튼을 누르면 좋아요 취소
+        // try{
+        //   const response = await api.del(`/api/likes/beers/${beerId}`,{
+        //     headers:{'Accesstoken': getCookie('accessToken')},
+        //     withCredentials: true
+        //   });
+        //   console.log(response);
+        //   if(response.data.status=="SUCCESS"){
+        //     setLikes(Likes-1);
+        //     setLikeAction(null);
+        //   }
+      
+         
+        // }catch (error) {
+        //   console.log('API 호출 중 에러 발생:', error.response);
+        // }
+    }
+  }
+}
   return (
-    <DetailLayout>
+    <d.DetailLayout>
       <Navigation/>
-      <ItemContainer>
-        <ItemImage src={data.image} alt={'beer image'}/>
-        <InfoContainer>
-            <span className='name'>{data.name}</span>
-            <span className='detailinfo'>{data.explanation}</span>
+      <d.ItemContainer>
+        <d.ItemImage src={beerdata.imageUrl} alt={'beer image'}/>
+        <d.InfoContainer>
+            <span className='name'>{beerdata.beerName}</span>
+            <span className='detailinfo'>{beerdata.introduction}</span>
+            {/*구글맵 부분*/}
             <span className='location_text'>위치</span>
             <Wrapper apiKey={"AIzaSyBVukbpmEsDRTQh0e2JkFKgDIa8PrDZr_8"}>
               <RenderMap/>
             </Wrapper>
-            <div style={{display: 'flex', flexDirection: 'inline', justifyContent: 'space-between'}}>  
-              <LikeDislikes/>
-              <HashTags>
-                {data.tags.map((tag, index) =>(
-                  <HashTag key={index}>{"#"}{tag}</HashTag>
-                ))}
-              </HashTags>
-            </div>
-          </InfoContainer>
-      </ItemContainer>
-      <br/><br/>
-      <Line/>
-      {/* {data.contents.map((content, index)=>(
-        <div>
-        <span>{content.title}</span>
-        <span>{content.exp}</span>
-        </div>
-      ))} */}
-      {/*상품상세설명 부분*/}
-      <ContentWrapper>
-        {/* {contents.map((data, index)=>(
-         <p className={data.style.toString()}>{data.content}</p>
-        ))
-        } */}
-      </ContentWrapper>
-    </DetailLayout>
-  )
 
+            {/*좋아요, 해시태그 부분*/}
+            <d.LikeTagContainer>  
+              <div style={{display: 'flex', alignItems: 'center'}}>
+              {LikeAction === 'liked' ? 
+                <d.Icon src={LikeFilled} onClick={onLike} alt="좋아요" /> : 
+                <d.Icon src={LikeOutlined} onClick={onLike} alt="좋아요" />}
+                <d.Text>좋아요 {Likes}개</d.Text>
+              </div>
+            
+              <d.HashTags>
+                {beerdata.hashTagNames.map((tag, index) =>(
+                  <d.HashTag key={index}>{"#"}{tag}</d.HashTag>
+                ))}
+              </d.HashTags>
+            </d.LikeTagContainer>
+
+            {/*가격 부분*/}
+            <d.PriceContainer>
+                  <span className='price_text'>상품 금액</span>
+                  <span className='price_value'>6000원</span>
+                  <button className='order'>주문하기</button>
+            </d.PriceContainer>
+
+          </d.InfoContainer>
+      </d.ItemContainer>
+      <br/><br/>
+      <d.Line/>
+
+      {/*상품상세설명 부분*/}
+      <d.ContentWrapper>
+      {contents  && contents.map((content, index)=>(
+        <div key={index}>
+        <p className='title'>{content.subject}</p>
+        <p className='description'>{content.description}</p>
+ 
+        </div>
+      ))}
+      </d.ContentWrapper>
+
+      {/*모바일 화면에서 하단바 부분*/ }
+      <d.MobileToolBar>
+        <d.LikeIconContainer>
+        {LikeAction === 'liked' ? 
+            <d.Icon src={LikeFilled} onClick={onLike} alt="좋아요" /> : 
+            <d.Icon src={LikeOutlined} onClick={onLike} alt="좋아요" />}
+        </d.LikeIconContainer>
+        <d.CartButton style={{background:'#FFF'}}>
+          <img src={Cart} style={{width: '25px'}}/>
+          <span style={{marginLeft: '0.5rem'}}>카트담기</span>
+        </d.CartButton>
+        <d.CartButton style={{background: '#FFC960'}}>
+          <span style={{marginLeft: '0.5rem'}}>주문하기</span>
+        </d.CartButton>
+      </d.MobileToolBar>
+    </d.DetailLayout>
+  )
+  // }
 }
 
 export default Detail;
 
-const DetailLayout = styled.div`
-  max-width: 1075px;
-  margin: 0 auto;
-`;
-const ItemContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-
-  @media (max-width: 920px) {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-`
-const ItemImage = styled.img`
-  max-width: 100%;
-  height: 420px;
-  border-radius: 5px 5px 0 0;
-  objext-fit: cover;
-
-  @media (max-width: 420px) {
-    width: 100%;
-    border-radius: 3.5px 3.5px 0 0;
-  }
-`;
-
-const InfoContainer = styled.div`
-  width: 90%;
-  max-height: 420px;
-  display: flex;
-  flex-direction: column;
-  margin-left: 1.5rem;
-
-  @media (max-width: 420px) {
-    margin: 0.5rem;
-  }
-
-  .name{
-    font-family: 'Noto Sans KR', sans-serif;
-    font-size: 2rem;
-    font-style: normal;
-    font-weight: 600;
-
-  }
-  .detailinfo{
-    font-family: 'Noto Sans KR', sans-serif;
-    font-size: 1rem;
-    font-style: normal;
-    font-weight: 400;
-    color: #666;
-    margin-top: 1rem;
-  }
-
-  .location_text{
-    font-family: 'Noto Sans KR', sans-serif;
-    font-size: 1.2rem;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    margin-top: 1rem;
-
-  }
-   
-`
-
-const HashTags = styled.div`
-  display: flex;
-  align-item: center;
-  font-size: 11px;
-  color: #666666;
-
-  @media (max-width: 420px) {
-    font-size:7.5px;
-  }
-`;
-
-const HashTag = styled.span`
-  margin-right: 5px;
-`;
-
-const Line = styled.hr`
-  width: 100%;
-  height: 0px;
-  @media (max-width: 420px) {
-    background: #ECECEC;
-    height: 10px;
-  }
-`
-
-const ContentWrapper = styled.div`
-
-  .title{
-    color: #000;
-    font-family: Noto Sans KR;
-    font-size: 40px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    margin: 0.5rem;
-    margin-top: 2.5rem;
-    @media (max-width: 420px) {
-      font-size:20px;
-    }
-  }
-
-  .description{
-    color: #666;
-    font-family: Noto Sans KR;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    margin: 0.5rem;
-
-    @media (max-width: 420px) {
-      font-size:14px;
-    }
-  }
-`

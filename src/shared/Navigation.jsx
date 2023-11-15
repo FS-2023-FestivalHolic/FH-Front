@@ -39,8 +39,6 @@ const StyledLink = styled(NavLink)`
     text-decoration: underline;
   }
   
-  
-
   @media (max-width: 390px) {
     ${({ isActive }) => !isActive && `
       display: none;
@@ -50,5 +48,4 @@ const StyledLink = styled(NavLink)`
       text-decoration: none;
     }
   }
-  
 `;

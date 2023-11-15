@@ -1,6 +1,12 @@
 import React, {useState, useEffect} from 'react'
 import {useForm} from 'react-hook-form';
 import * as s from '../style/SignInUpStyle';
+import { useNavigate } from 'react-router';
+import axios from 'axios';
+
+const api = axios.create({
+  baseURL: 'http://3.34.177.220:8083', 
+});
 function Register() {
 
   const {
@@ -10,11 +16,26 @@ function Register() {
     reset
   } = useForm();
 
-  const onSubmit = (data) => {
+  const navigate = useNavigate();
 
-      console.log(data);
-      reset();
+  //회원가입 폼 제출 
+  const onSubmit = async (data) => {
+    try {
+      const response = await api.post('/api/users/sign-up', data);
+      if (response.data.status=="SUCCESS") {
+        console.log(response.data.status);
+        alert('회원가입 성공! 로그인을 진행해주세요')
+        navigate('/login');
+      }
+    } catch (error) {
+      if(error.response.data.code==423){
+        alert(error.response.data.message);
+        reset();
+      }
+      console.log('API 호출 중 에러 발생:', error.response.data);
+    }
   }
+
   return (
     <s.SignLayout>
       <s.SignHeader>
@@ -25,8 +46,8 @@ function Register() {
 
       <s.SignForm onSubmit={handleSubmit(onSubmit)}>
         <s.SignLabel>아이디</s.SignLabel>
-        <s.SignInput type="text" name="uid" placeholder='4~15자 이내로 작성해주세요' 
-        {...register("uid", {required: '아이디를 입력하세요', 
+        <s.SignInput type="text" name="loginId" placeholder='4~15자 이내로 작성해주세요' 
+        {...register("loginId", {required: '아이디를 입력하세요', 
               minLength: { value: 4, message: '최소 4자 이상이어야 합니다.',
               maxLength: { value: 15, message: '최대 15자까지 입력 가능합니다.'}}})}/>
         {errors.uid && <span className="error">{errors.uid.message}</span>}
