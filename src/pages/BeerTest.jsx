@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import BannerTest from "../assets/Banner_beerTest.png";
 import styled from 'styled-components';
 import Navigation from '../shared/Navigation';
@@ -6,6 +6,7 @@ import WheatBeer from '../assets/wheatBeer.png';
 import Kakao from '../assets/kakaoTalk.png';
 import Insta from '../assets/instagram.png';
 import Chain from '../assets/chain.png';
+import MobileBanner from '../assets/Banner_beerTest_mobile.png';
 
 function BeerType(answers) {
   const answerKey = `question1${answers.question1}question2${answers.question2}question3${answers.question3}question4${answers.question4}`;
@@ -21,6 +22,21 @@ function BeerTest() {
   const [answers, setAnswers] = useState({});
   const [result, setResult] = useState(null);
   const totalQuestions = 4;
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 390);
+
+  // 모바일용일 때 이미지 전환
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 390);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
 
   const startTest = () => {
     setStep(1); // 검사 시작 버튼을 클릭하면 질문 1로 이동
@@ -52,9 +68,7 @@ function BeerTest() {
       <Navigation />
       {step === 0 && (
         <StartContainer>
-          <MainBanner>
-            <img src={BannerTest} alt="Beer Test"/>
-          </MainBanner>
+          {isMobile ? <img src={MobileBanner} alt="Beer Test"/> : <img src={BannerTest} alt="Beer Test"/>}
           <Text>수제 맥주 축제를 본격적으로 즐기기 위해 <br/>
             자신에게 맞는 맥주 유형을 찾아보세요!</Text>
           <StartBtn onClick={startTest}>검사 실시</StartBtn>
@@ -113,12 +127,12 @@ function BeerTest() {
           <RTitle>수제 맥주 테스트 결과</RTitle>
           <RText>이런 맥주는 어떠세요?</RText>
           <BeerTitle>밀맥주(WHEAT BEER)</BeerTitle>
-          <img src={WheatBeer} alt="밀맥주"/>
+          <BeerImg src={WheatBeer} alt="밀맥주"/>
           <ShareTxt>퀴즈 결과를 주변 사람에게 공유해보세요!</ShareTxt>
           <Share>
-            <img src={Kakao} alt="kakao Talk"/>
-            <img src={Insta} alt="Instagram" />
-            <img src={Chain} alt="url share" />
+            <Img src={Kakao} alt="kakao Talk"/>
+            <Img src={Insta} alt="Instagram" />
+            <Img src={Chain} alt="url share" />
           </Share>
           <Hr />
           <Description>
@@ -145,16 +159,23 @@ const StartContainer = styled.div`
   align-items: center;
   gap: 105px;
   margin: 0 auto;
-`;
 
-const MainBanner = styled.div`
-  margin: 24px 0;
+  @media (max-width: 390px) {
+    max-width: 367px;
+    height: 844px;
+    margin-top: 10px;
+  }
 `;
 
 const Text = styled.div`
   font-size: 36px;
   color: #666666;
+
+  @media (max-width: 390px) {
+    font-size: 19px;
+  }
 `;
+
 const StartBtn = styled.button`
   width: 293px;
   height: 81px;
@@ -166,6 +187,13 @@ const StartBtn = styled.button`
   position: absolute;
   margin-top: 350px;
   cursor: pointer;
+
+  @media (max-width: 390px) {
+    width: 179px;
+    hieght: 50px;
+    font-size: 24px;
+    margin-top: 210px;
+  }
 `;
 
 const QContainer = styled.div`
@@ -174,10 +202,21 @@ const QContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 50px;
+
+  @media (max-width: 390px) {
+    max-width: 367px;
+    height: 844px;
+    margin-top: 10px;
+  }
 `;
 
 const Step = styled.div`
   font-size: 32px;
+
+  @media (max-width: 390px) {
+    font-size: 20px;
+    margin: 20px 0 10px;
+  }
 `
 
 const Question = styled.div`
@@ -185,12 +224,17 @@ const Question = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 15px;
-  margin-top: 15px;
+  margin-top: 15px;  
 `;
 
 const QTitle = styled.div`
   font-size: 48px;
   margin-bottom: 50px;
+
+  @media (max-width: 390px) {
+    font-size: 25px;
+    margin-bottom: 60px;
+  }
 `;
 
 const QButton = styled.button`
@@ -201,6 +245,12 @@ const QButton = styled.button`
   border-radius: 10px;
   color: #FFFFFF;
   font-size: 36px;
+
+  @media (max-width: 390px) {
+    max-width: 371px;
+    height: 78px;
+    font-size: 24px;
+  }
 `;
 
 const ResultContainer = styled.div`
@@ -208,50 +258,108 @@ const ResultContainer = styled.div`
   flex-direction: column;
   align-items: center;
   margin: 50px auto 0;
+
+  @media (max-width: 390px) {
+    max-width: 390px;
+    margin: 0 auto;
+  }
 `;
 
 const BeerTitle = styled.div`
   font-size: 64px;
   margin-bottom: 40px;
+
+  @media (max-width: 390px) {
+    font-size: 26px; 
+    margin-bottom: 20px;
+  }
+`;
+
+const BeerImg = styled.img`
+  @media (max-width: 390px) {
+    width: 160px;
+    height: 200px;
+  }
 `;
 
 const ShareTxt = styled.div`
   font-size: 20px;
   font-weight: 600;
   margin: 40px 0;
+
+  @media (max-width: 390px) {
+    font-size: 13px;
+    margin: 20px 0;
+  }
 `;
 
 const Share = styled.div`
   display: flex;
   gap: 150px;
+
+  @media (max-width: 390px) {
+    gap: 55px;
+  }
+`
+
+const Img = styled.img`
+  @media (max-width: 390px) {
+    width: 46px;
+    height: 46px;
+  }
 `
 
 const Hr = styled.hr`
   width: 1136px;
   margin: 40px 0;
+
+  @media (max-width: 390px) {
+    width: 100%;
+    margin: 20px 0;
+  }
 `;
 
 const Description = styled.div`
   display: flex;
   flex-direction: column;
   gap: 50px;
+  margin-bottom: 50px;
+
+  @media (max-width: 390px) {
+    max-width: 367px;
+    gap: 30px;
+  }
 `;
 
 const DTitle = styled.div`
   font-size: 28px;
   color: #383838;
+
+  @media (max-width: 390px) {
+    font-size: 19px;
+  }
 `;
 
 const DContent = styled.div`
   width: 1136px;
   color: #666666;
   font-size: 28px;
+
+  @media (max-width: 390px) {
+    width: 367px;
+    font-size: 20px;
+  }
 `;
 
 const RTitle = styled.div`
   width: 1136px;
   color: #7A7A7A;
   font-size: 32px;
+
+  @media (max-width: 390px) {
+    max-width: 367px;
+    font-size: 18px;
+  }
 `;
 
 const RText =  styled.div`
@@ -259,6 +367,11 @@ const RText =  styled.div`
   color: #383838;
   font-size: 24px;
   margin: 10px 0 40px;
+
+  @media (max-width: 390px) {
+    max-width: 367px;
+    font-size: 15px;
+  }
 `;
 
 export default BeerTest;

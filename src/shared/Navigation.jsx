@@ -1,13 +1,15 @@
 import styled from "styled-components";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 export default function Navigation() {
+  const location = useLocation();
+
   return (
     <Nav>
-      <StyledLink to="/">Main</StyledLink>
-      <StyledLink to="/beer">수제맥주</StyledLink>
-      <StyledLink to="/test">맥주 테스트</StyledLink>
-  </Nav>
+      <StyledLink to="/" isActive={location.pathname === '/'}>Main</StyledLink>
+      <StyledLink to="/beer" isActive={location.pathname === '/beer'}>수제맥주</StyledLink>
+      <StyledLink to="/test" isActive={location.pathname === '/test'}>맥주 테스트</StyledLink>
+    </Nav>
   );
 };
 
@@ -32,8 +34,21 @@ const StyledLink = styled(NavLink)`
     color: #1E1E1E;
   }
 
-  &.active {
+  &.active, &.custom-active {
     color: #1E1E1E;
     text-decoration: underline;
   }
+  
+  
+
+  @media (max-width: 390px) {
+    ${({ isActive }) => !isActive && `
+      display: none;
+    `}
+
+    &.active, &.custom-active {
+      text-decoration: none;
+    }
+  }
+  
 `;
