@@ -41,7 +41,7 @@ function Login(props) {
       }
     } catch (error) {
       if(error.response.data.status==500){ //아이디, 비밀번호가 틀렸을 때 
-          alert(error.response.data.message);
+          alert('아이디 또는 비밀번호가 틀렸습니다.');
           reset();
       }
     }

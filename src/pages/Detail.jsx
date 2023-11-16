@@ -103,21 +103,21 @@ function Detail(props) {
               
     }else{
         //Like 버튼이 클릭이 되어 있을 때 버튼을 누르면 좋아요 취소
-        // try{
-        //   const response = await api.del(`/api/likes/beers/${beerId}`,{
-        //     headers:{'Accesstoken': getCookie('accessToken')},
-        //     withCredentials: true
-        //   });
-        //   console.log(response);
-        //   if(response.data.status=="SUCCESS"){
-        //     setLikes(Likes-1);
-        //     setLikeAction(null);
-        //   }
+        try{
+          const response = await api.delete(`/api/likes/beers/${beerId}`,{
+            headers:{'Accesstoken': getCookie('accessToken')},
+            withCredentials: true
+          });
+     
+          if(response.data.status=="SUCCESS"){
+            setLikes(Likes-1);
+            setLikeAction(null);
+          }
       
          
-        // }catch (error) {
-        //   console.log('API 호출 중 에러 발생:', error.response);
-        // }
+        }catch (error) {
+          console.log('API 호출 중 에러 발생:', error.response);
+        }
     }
   }
 }
