@@ -1,23 +1,13 @@
-import React, { useState } from "react";
+import React from 'react';
 import styled from "styled-components";
-import HashtagBox from "../components/HashtagBox";
 import BeerItem from "../components/BeerItem";
 import Navigation from "../shared/Navigation";
+import TagSlide from '../components/TagSlide';
 import { Link } from "react-router-dom";
 
 const List = () => {
   const tags = ["#달달함", "#부드러움", "#상큼함", "#깔끔함", "#쓴맛", "#쌉쌀함", "#과일향", "#새콤달콤"];
-  const [selectTags, setSelectTags] = useState([]);
-
-  const addHashtag = (tag) => {
-    if(!selectTags.includes(tag)) {
-      setSelectTags([...selectTags, tag]);
-    }
-  };
-
-  const removeTag = (tag) => {
-    setSelectTags(selectTags.filter((selectTag) => selectTag !== tag));
-  }; 
+  
 
   // 임시 맥주 데이터 사용
   const beerData = [
@@ -38,19 +28,7 @@ const List = () => {
   return (
     <Wrapper> 
       <Navigation />
-      <HashtagsContainer>
-        {tags.map((tag, index) => (
-          <div>
-            <HashTag key={index} onClick={() => addHashtag(tag)}>
-              {tag}
-            </HashTag>
-            {index < tags.length - 1 && <span>|</span>}
-          </div>
-        ))}
-      </HashtagsContainer>
-
-      <HashtagBox tags={selectTags} removeTag={removeTag} />
-      
+      <TagSlide items={tags}/>
       <SortOptions>
         <SortButton>가나다순</SortButton>
         <Bar>|</Bar>
@@ -73,21 +51,6 @@ const Wrapper = styled.div`
   margin: 0 auto;
 `;
 
-const HashtagsContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap:15px;
-  color: #666;
-  font-size: 15px;
-  font-weight: 400;
-`;
-
-const HashTag = styled.span`
-  padding: 5px;
-  cursor: pointer;
-  margin-right: 15px;
-`; 
-
 const SortOptions = styled.div`
   display: flex;
   margin: 20px 0 30px;
@@ -101,6 +64,10 @@ const SortButton = styled.button`
   font-size: 15px;
   font-weight: 400;
   color: #666666B0;
+
+  &:hover {
+    color: #666;
+  }
 `;
 
 const Bar = styled.span`
@@ -115,6 +82,14 @@ const ItemContainer = styled.div`
   grid-template-columns: repeat(4,1fr);
   grid-gap: 9px;
   margin-bottom: 20px;
+
+  @media (max-width: 390px) {
+    width: 370px;
+    grid-template-columns: repeat(2,1fr);
+    grid-gap: 8px;
+    margin: 14px auto;
+    object-fit: cover;
+  }
 `;
 
 export default List;
