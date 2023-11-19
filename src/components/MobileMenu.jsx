@@ -59,6 +59,7 @@ function MobileMenu(props) {
                 </Header>
                 <StyledLink onClick={closeMenu} to='/'>Main</StyledLink>
                 <StyledLink onClick={closeMenu} to='/beer'>수제맥주</StyledLink>
+                <StyledLink onClick={closeMenu} to='/test'>맥주테스트</StyledLink>
                 {isLogin && <StyledLink onClick={handleMobileMy} >마이페이지</StyledLink>}
                 <hr className='line'/>
         
