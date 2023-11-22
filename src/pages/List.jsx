@@ -1,29 +1,33 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from "styled-components";
 import BeerItem from "../components/BeerItem";
 import Navigation from "../shared/Navigation";
 import TagSlide from '../components/TagSlide';
 import { Link } from "react-router-dom";
+import axios from 'axios';
+
+const api = axios.create({
+  baseURL: 'http://3.34.177.220:8083', 
+});
 
 const List = () => {
   const tags = ["#달달함", "#부드러움", "#상큼함", "#깔끔함", "#쓴맛", "#쌉쌀함", "#과일향", "#새콤달콤"];
-  
+  const [beerData, setBeerData] = useState([]);
 
-  // 임시 맥주 데이터 사용
-  const beerData = [
-    {id: 1, image: require('../assets/FirstJuiceLarger.png'), name: '첫즙라거', like: 5, tags: ['달달함', '부드러움']},
-    {id: 2, image: require('../assets/LemonRamalade.png'), name: '레몬라말레이드', like: 22, tags: ['달달함', '부드러움']},
-    {id: 3, image: require('../assets/LargerOnTheBeach.png'), name: '라거 온 더 비치', like: 5, tags: ['달달함', '부드러움']},
-    {id: 4, image: require('../assets/DarkLarger.png'), name: '다크 라거', like: 22, tags: ['달달함', '부드러움', '쓴맛']},
-    {id: 5, image: require('../assets/LemonRamalade.png'), name: '레몬라말레이드', like: 22, tags: ['달달함', '부드러움']},
-    {id: 6, image: require('../assets/LargerOnTheBeach.png'), name: '라거 온 더 비치', like: 5, tags: ['달달함', '부드러움']},
-    {id: 7, image: require('../assets/DarkLarger.png'), name: '다크 라거', like: 22, tags: ['달달함', '부드러움', '쓴맛']},
-    {id: 8, image: require('../assets/LemonRamalade.png'), name: '레몬라말레이드', like: 22, tags: ['달달함', '부드러움']},
-    {id: 9, image: require('../assets/LargerOnTheBeach.png'), name: '라거 온 더 비치', like: 5, tags: ['달달함', '부드러움']},
-    {id: 10, image: require('../assets/DarkLarger.png'), name: '다크 라거', like: 22, tags: ['달달함', '부드러움', '쓴맛']},
-    {id: 11, image: require('../assets/LemonRamalade.png'), name: '레몬라말레이드', like: 22, tags: ['달달함', '부드러움']},
-    {id: 12, image: require('../assets/LargerOnTheBeach.png'), name: '라거 온 더 비치', like: 5, tags: ['달달함', '부드러움']},
-  ]; 
+  useEffect(()=>{
+    async function fetchBeerData() {
+      try {
+        const response = await api.get(`/api/beers`);
+        if (response) {
+          setBeerData(response.data.data);
+          console.log(response.data.data)
+        }
+      } catch (error) {
+        console.error('API 호출 중 에러 발생:', error);
+      }
+    }
+    fetchBeerData();
+  }, []);
 
   return (
     <Wrapper> 
@@ -36,9 +40,9 @@ const List = () => {
       </SortOptions>
 
       <ItemContainer>
-        {beerData.map((beer, index) => (
-          <Link to={`/beer/${beer.id}`} style={{ textDecoration: "none"}}>
-            <BeerItem key={index} item={beer} />
+        {beerData.map((beer) => (
+          <Link to={`/beer/${beer.beerId}`} style={{ textDecoration: "none"}}>
+            <BeerItem key={beer.beerId} item={beer} />
           </Link>
         ))}
       </ItemContainer>

@@ -4,17 +4,19 @@ import LikeIcon from "../assets/heart.png";
 const BeerItem = ({item}) => {
   return (
     <Container>
-      <ItemImage src={item.image} alt={item.name} />
+      <ImgContainer>
+        <ItemImage src={item.imageUrl} alt={item.beerName} />
+      </ImgContainer>
       <Description>
-        <ItemName>{item.name}</ItemName>
+        <ItemName>{item.beerName}</ItemName>
         <HashTags>
-          {item.tags.map((tag, index) =>(
+          {item.hashTagList.map((tag, index) =>(
             <HashTag key={index}>{"#"}{tag}</HashTag>
           ))}
         </HashTags>
         <ItemLikes>
           <Icon src={LikeIcon} alt="좋아요" />
-          {item.like}
+          {item.likesCnt}
         </ItemLikes>
       </Description>
     </Container>
@@ -38,16 +40,22 @@ const Container = styled.div`
   }
 `;
 
-const ItemImage = styled.img`
-  max-width: 100%;
+const ImgContainer = styled.div`
+  width: 262px;
   height: 228px;
-  border-radius: 5px 5px 0 0;
-  objext-fit: cover;
-
+  overflow: hidden;
+  border-radius: 5px 5px 0 0;  
+  
   @media (max-width: 390px) {
+    width: 178px;
     height: 155px;
     border-radius: 3.5px 3.5px 0 0;
   }
+`
+
+const ItemImage = styled.img`
+  width: 100%;
+  object-fit: fill;
 `;
 
 const Description = styled.div`
