@@ -12,14 +12,15 @@ const api = axios.create({
 
 const List = () => {
   const tags = ["#달달함", "#부드러움", "#상큼함", "#깔끔함", "#쓴맛", "#쌉쌀함", "#과일향", "#새콤달콤"];
-  const [beerData, setBeerData] = useState([]);
+  const [sortedItems, setSortedItems] = useState([]);
+  const [sortBy, setSortBy] = useState('id');
 
   useEffect(()=>{
     async function fetchBeerData() {
       try {
         const response = await api.get(`/api/beers`);
         if (response) {
-          setBeerData(response.data.data);
+          setSortedItems(response.data.data);
           console.log(response.data.data)
         }
       } catch (error) {
@@ -29,18 +30,34 @@ const List = () => {
     fetchBeerData();
   }, []);
 
+  useEffect(() => {
+    if (sortBy === 'likes' || sortBy === 'name') {
+      fetchSortedItems(sortBy);
+    }
+  }, [sortBy]); 
+
+  const fetchSortedItems = (sortType) => {
+    axios.get(`/api/beers/${sortType}`)
+      .then(response => setSortedItems(response.data.data))
+      .catch(error => console.error('API 호출 중 에러 발생:', error));
+  };
+
+  const handleSort = (sortType) => {
+    setSortBy(sortType);
+  };
+
   return (
     <Wrapper> 
       <Navigation />
       <TagSlide items={tags}/>
       <SortOptions>
-        <SortButton>가나다순</SortButton>
+        <SortButton onClick={() => handleSort('name')}>가나다순</SortButton>
         <Bar>|</Bar>
-        <SortButton>좋아요순</SortButton>
+        <SortButton onClick={() => handleSort('likes')}>좋아요순</SortButton>
       </SortOptions>
 
       <ItemContainer>
-        {beerData.map((beer) => (
+        {sortedItems.map((beer) => (
           <Link to={`/beer/${beer.beerId}`} style={{ textDecoration: "none"}}>
             <BeerItem key={beer.beerId} item={beer} />
           </Link>
