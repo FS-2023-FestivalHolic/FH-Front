@@ -49,7 +49,6 @@ const List = () => {
             });
             if (response) {
               setSortedItems(response.data.data);
-              console.log(response.data.data);
             }
         }
       } catch (error) {
@@ -97,9 +96,9 @@ const List = () => {
       </SortOptions>
 
       <ItemContainer>
-        {sortedItems.map((beer) => (
-          <Link to={`/beer/${beer.beerId}`} style={{ textDecoration: "none"}}>
-            <BeerItem key={beer.beerId} item={beer} />
+        {sortedItems.map((beer, index) => (
+          <Link to={`/beer/${beer.beerId}`} key={index} style={{ textDecoration: "none"}}>
+            <BeerItem item={beer} />
           </Link>
         ))}
       </ItemContainer>
