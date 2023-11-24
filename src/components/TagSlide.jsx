@@ -80,12 +80,12 @@ const TagSlide = ({items}) => {
             onMouseMove={isDrag ? onThrottleDragMove : null}
           >
             <SlideItem>
-              {items.map((item, index) => (
+              {items.map((item) => (
                 <div>
-                  <HashTag key={index} onClick={() => addHashtag(item)}>
-                    {item}
+                  <HashTag key={item.id} onClick={() => addHashtag(item)}>
+                    {item.hashTagName}
                   </HashTag>
-                  {index < items.length - 1 && <span>|</span>}
+                  {item.id < items.length - 1 && <span>|</span>}
                 </div>
               ))}
             </SlideItem>
@@ -93,12 +93,12 @@ const TagSlide = ({items}) => {
         )} 
       </> : 
       <HashtagsContainer>
-        {items.map((tag, index) => (
+        {items.map((tag) => (
           <div>
-            <HashTag key={index} onClick={() => addHashtag(tag)}>
-              {tag}
+            <HashTag key={tag.id} onClick={() => addHashtag(tag)}>
+              {tag.hashTagName}
             </HashTag>
-            {index < items.length - 1 && <span>|</span>}
+            {tag.id < items.length - 1 && <span>|</span>}
           </div>
         ))}
       </HashtagsContainer>

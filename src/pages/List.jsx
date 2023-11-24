@@ -11,9 +11,24 @@ const api = axios.create({
 });
 
 const List = () => {
-  const tags = ["#달달함", "#부드러움", "#상큼함", "#깔끔함", "#쓴맛", "#쌉쌀함", "#과일향", "#새콤달콤"];
+  const [tags, setTags] = useState([]);
   const [sortedItems, setSortedItems] = useState([]);
   const [sortBy, setSortBy] = useState('id');
+
+  useEffect(()=>{
+    async function fetchTagData() {
+      try {
+        const response = await api.get(`/api/hashTags`);
+        if (response) {
+          setTags(response.data.data);
+          console.log(response.data.data)
+        }
+      } catch (error) {
+        console.error('API 호출 중 에러 발생:', error);
+      }
+    }
+    fetchTagData();
+  }, []);
 
   useEffect(()=>{
     async function fetchBeerData() {

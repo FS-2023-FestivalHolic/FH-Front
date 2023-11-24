@@ -3,9 +3,9 @@ import styled from "styled-components";
 const HashtagBox = ({ tags, removeTag }) => {
   return (
     <Container>
-      {tags.map((tag, index) => (
-        <TagSection key={index}>
-          <TagTitle>{tag}</TagTitle>
+      {tags.map((tag) => (
+        <TagSection key={tag.id}>
+          <TagTitle>{tag.hashTagName}</TagTitle>
           <RemoveButton onClick={() => removeTag(tag)}>
             X
           </RemoveButton>
