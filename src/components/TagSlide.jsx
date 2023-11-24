@@ -98,7 +98,7 @@ const TagSlide = ({items}) => {
             <HashTag key={tag.id} onClick={() => addHashtag(tag)}>
               {tag.hashTagName}
             </HashTag>
-            {tag.id < items.length - 1 && <span>|</span>}
+            {tag.id < items.length && <span>|</span>}
           </div>
         ))}
       </HashtagsContainer>
