@@ -1,19 +1,13 @@
+import React from 'react';
 import styled from "styled-components";
-import BeerItem from "../components/BeerItem";
-import { Link } from "react-router-dom";
+import BeerItem from "../components/UserBeerItem";
+import { Link, useLocation } from "react-router-dom";
 import GlobalStyle from "../shared/GlobalStyle";
 
 const User = () => {
-  // 임시 맥주 데이터 사용
-  const beerData = [
-    {id: 1, image: require('../assets/FirstJuiceLarger.png'), name: '첫즙라거', like: 5, tags: ['달달함', '부드러움']},
-    {id: 2, image: require('../assets/LemonRamalade.png'), name: '레몬라말레이드', like: 22, tags: ['달달함', '부드러움']},
-    {id: 3, image: require('../assets/LargerOnTheBeach.png'), name: '라거 온 더 비치', like: 5, tags: ['달달함', '부드러움']},
-    {id: 4, image: require('../assets/DarkLarger.png'), name: '다크 라거', like: 22, tags: ['달달함', '부드러움', '쓴맛']},
-  ]; 
-  
+  const { state } = useLocation();
   const isSpecialPage = true;
-  
+
   return (
     <Wrapper>
       <GlobalStyle specialPage={isSpecialPage} />
@@ -21,16 +15,16 @@ const User = () => {
         <Title>마이페이지</Title>
         <TopSection>
           <UserContent>
-            <Name>GDSC</Name>님 안녕하세요.
+            <Name>{state.userData.userName}</Name>님 안녕하세요.
           </UserContent>
         </TopSection>
         <Title>좋아요 목록</Title>
         <LikeList>
-          {beerData.map((beer, index) => (
-            <StyledLink to={`/beer/${beer.id}`}>
-              <BeerItem key={index} item={beer} />
+          {state.userData.beerList.map((beer, index) => (
+            <StyledLink to={`/beer/${beer.beerId}}`} key={index}>
+              <BeerItem item={beer} />
             </StyledLink>
-          ))}
+          ))}    
         </LikeList>
       </RContainer>
     </Wrapper>
