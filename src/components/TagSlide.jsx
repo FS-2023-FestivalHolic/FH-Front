@@ -1,13 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from "styled-components";
-import HashtagBox from './HashtagBox';
 
-const TagSlide = ({items}) => {
+const TagSlide = ({items, addHashtag}) => {
   const containerRef = useRef(null);
   const [startX, setStartX] = useState(null);
   const [isDrag, setIsDrag] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 390);
-  const [selectTags, setSelectTags] = useState([]);
   
   // 모바일용일 때 태그 슬라이드로 전환
   useEffect(() => {
@@ -59,16 +57,6 @@ const TagSlide = ({items}) => {
   const delay = 50;
   const onThrottleDragMove = throttle(onDragMove, delay);
 
-  const addHashtag = (tag) => {
-    if(!selectTags.includes(tag)) {
-      setSelectTags([...selectTags, tag]);
-    }
-  };
-
-  const removeTag = (tag) => {
-    setSelectTags(selectTags.filter((selectTag) => selectTag !== tag));
-  }; 
-
   return (
     <div> {isMobile ? <>
         {items && (
@@ -80,12 +68,12 @@ const TagSlide = ({items}) => {
             onMouseMove={isDrag ? onThrottleDragMove : null}
           >
             <SlideItem>
-              {items.map((item, index) => (
-                <div>
-                  <HashTag key={index} onClick={() => addHashtag(item)}>
-                    {item}
+              {items.map((item) => (
+                <div key={item.id}>
+                  <HashTag onClick={() => addHashtag(item)}>
+                    {item.hashTagName}
                   </HashTag>
-                  {index < items.length - 1 && <span>|</span>}
+                  {item.id < items.length && <span>|</span>}
                 </div>
               ))}
             </SlideItem>
@@ -93,18 +81,16 @@ const TagSlide = ({items}) => {
         )} 
       </> : 
       <HashtagsContainer>
-        {items.map((tag, index) => (
+        {items.map((tag) => (
           <div>
-            <HashTag key={index} onClick={() => addHashtag(tag)}>
-              {tag}
+            <HashTag key={tag.id} onClick={() => addHashtag(tag)}>
+              {tag.hashTagName}
             </HashTag>
-            {index < items.length - 1 && <span>|</span>}
+            {tag.id < items.length && <span>|</span>}
           </div>
         ))}
       </HashtagsContainer>
     }
-      
-      <HashtagBox tags={selectTags} removeTag={removeTag} />
     </div>
   );
 };
