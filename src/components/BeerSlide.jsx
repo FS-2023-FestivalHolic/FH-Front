@@ -31,9 +31,9 @@ const BeerSlide = ({items}) => {
 
   return (
     <SlideList>
-      {currentItems.map((item, index) => (
+      {currentItems.map((item) => (
         <Slide>
-          <Link to={`/beer/${item.id}`} key={index}  style={{ textDecoration: "none"}}>
+          <Link to={`/beer/${item.beerId}`} key={item.beerId} style={{ textDecoration: "none"}}>
           <BeerItem item={item} />
           </Link>
         </Slide>

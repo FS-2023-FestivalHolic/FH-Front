@@ -5,9 +5,16 @@ import MainImg from "../assets/mainImg.png";
 import BeerSlide from "../components/BeerSlide";
 import MobileBanner from "../assets/Banner_main_mobile.png";
 import BeerSlideMobile from '../components/BeerSlidMobile';
+import axios from 'axios';
+
+const api = axios.create({
+  baseURL: 'http://3.34.177.220:8083', 
+});
 
 const Main = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 390);
+  const [beerData, setBeerData] = useState([]);
+
 
   // 모바일용일 때 이미지 전환
   useEffect(() => {
@@ -22,17 +29,20 @@ const Main = () => {
     };
   }, []);
 
-  // 임시 맥주 데이터 사용
-  const beerData = [
-    {id: 1, image: require('../assets/FirstJuiceLarger.png'), name: '첫즙라거', like: 5, tags: ['달달함', '부드러움']},
-    {id: 2, image: require('../assets/LemonRamalade.png'), name: '레몬라말레이드', like: 22, tags: ['달달함', '부드러움']},
-    {id: 3, image: require('../assets/LargerOnTheBeach.png'), name: '라거 온 더 비치', like: 5, tags: ['달달함', '부드러움']},
-    {id: 4, image: require('../assets/DarkLarger.png'), name: '다크 라거', like: 22, tags: ['달달함', '부드러움', '쓴맛']},
-    {id: 3, image: require('../assets/LargerOnTheBeach.png'), name: '라거 온 더 비치', like: 5, tags: ['달달함', '부드러움']},
-    {id: 4, image: require('../assets/DarkLarger.png'), name: '다크 라거', like: 22, tags: ['달달함', '부드러움', '쓴맛']},
-    {id: 3, image: require('../assets/LargerOnTheBeach.png'), name: '라거 온 더 비치', like: 5, tags: ['달달함', '부드러움']},
-    {id: 4, image: require('../assets/DarkLarger.png'), name: '다크 라거', like: 22, tags: ['달달함', '부드러움', '쓴맛']},
-  ]; 
+  useEffect(()=>{
+    async function fetchBeerData() {
+      try {
+        const response = await api.get(`/api/beers`);
+        if (response) {
+          setBeerData(response.data.data);
+          console.log(response.data.data)
+        }
+      } catch (error) {
+        console.error('API 호출 중 에러 발생:', error);
+      }
+    }
+    fetchBeerData();
+  }, []);
 
   return(
     <Wrapper>

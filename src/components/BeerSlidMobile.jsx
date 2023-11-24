@@ -56,7 +56,7 @@ const BeerSlideMobile = ({items}) => {
         >
           <SlideItem>
             {items.map((item, index) => (
-              <Link to={`/beer/${item.id}`} key={index}  style={{ textDecoration: "none"}}>
+              <Link to={`/beer/${item.beerId}`} key={index}  style={{ textDecoration: "none"}}>
                 <BeerItem item={item} />
               </Link>
             ))}
