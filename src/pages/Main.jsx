@@ -35,7 +35,6 @@ const Main = () => {
         const response = await api.get(`/api/beers`);
         if (response) {
           setBeerData(response.data.data);
-          console.log(response.data.data)
         }
       } catch (error) {
         console.error('API 호출 중 에러 발생:', error);
