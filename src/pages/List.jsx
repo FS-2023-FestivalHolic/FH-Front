@@ -5,6 +5,7 @@ import Navigation from "../shared/Navigation";
 import TagSlide from '../components/TagSlide';
 import { Link } from "react-router-dom";
 import axios from 'axios';
+import HashtagBox from '../components/HashtagBox';
 
 const api = axios.create({
   baseURL: 'http://3.34.177.220:8083', 
@@ -12,16 +13,17 @@ const api = axios.create({
 
 const List = () => {
   const [tags, setTags] = useState([]);
+  const [selectTags, setSelectTags] = useState([]);
   const [sortedItems, setSortedItems] = useState([]);
   const [sortBy, setSortBy] = useState('id');
 
+  // hashTag
   useEffect(()=>{
     async function fetchTagData() {
       try {
         const response = await api.get(`/api/hashTags`);
         if (response) {
           setTags(response.data.data);
-          console.log(response.data.data)
         }
       } catch (error) {
         console.error('API 호출 중 에러 발생:', error);
@@ -30,20 +32,32 @@ const List = () => {
     fetchTagData();
   }, []);
 
+  // beer
   useEffect(()=>{
     async function fetchBeerData() {
       try {
-        const response = await api.get(`/api/beers`);
-        if (response) {
-          setSortedItems(response.data.data);
-          console.log(response.data.data)
+        if (selectTags.length === 0) {
+          const response = await api.get(`/api/beers`);
+          if (response) {
+            setSortedItems(response.data.data);
+          }
+        } else {
+            const response = await api.get(`/api/beers/hashTags`, {
+              params: {
+                hashTagIds: selectTags.map(tag => tag.id).join(',')
+              }
+            });
+            if (response) {
+              setSortedItems(response.data.data);
+              console.log(response.data.data);
+            }
         }
       } catch (error) {
         console.error('API 호출 중 에러 발생:', error);
       }
     }
     fetchBeerData();
-  }, []);
+  }, [selectTags]);
 
   useEffect(() => {
     if (sortBy === 'likes' || sortBy === 'name') {
@@ -61,10 +75,21 @@ const List = () => {
     setSortBy(sortType);
   };
 
+  const addHashtag = (tag) => {
+    if(!selectTags.includes(tag)) {
+      setSelectTags([...selectTags, tag]);
+    }
+  };
+
+  const removeTag = (tag) => {
+    setSelectTags(selectTags.filter((selectTag) => selectTag !== tag));
+  }; 
+
   return (
     <Wrapper> 
       <Navigation />
-      <TagSlide items={tags}/>
+      <TagSlide items={tags} addHashtag={addHashtag}/>
+      <HashtagBox tags={selectTags} removeTag={removeTag} />
       <SortOptions>
         <SortButton onClick={() => handleSort('name')}>가나다순</SortButton>
         <Bar>|</Bar>

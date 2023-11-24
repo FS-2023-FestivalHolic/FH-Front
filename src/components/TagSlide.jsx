@@ -1,13 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from "styled-components";
-import HashtagBox from './HashtagBox';
 
-const TagSlide = ({items}) => {
+const TagSlide = ({items, addHashtag}) => {
   const containerRef = useRef(null);
   const [startX, setStartX] = useState(null);
   const [isDrag, setIsDrag] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 390);
-  const [selectTags, setSelectTags] = useState([]);
   
   // 모바일용일 때 태그 슬라이드로 전환
   useEffect(() => {
@@ -59,16 +57,6 @@ const TagSlide = ({items}) => {
   const delay = 50;
   const onThrottleDragMove = throttle(onDragMove, delay);
 
-  const addHashtag = (tag) => {
-    if(!selectTags.includes(tag)) {
-      setSelectTags([...selectTags, tag]);
-    }
-  };
-
-  const removeTag = (tag) => {
-    setSelectTags(selectTags.filter((selectTag) => selectTag !== tag));
-  }; 
-
   return (
     <div> {isMobile ? <>
         {items && (
@@ -81,11 +69,11 @@ const TagSlide = ({items}) => {
           >
             <SlideItem>
               {items.map((item) => (
-                <div>
-                  <HashTag key={item.id} onClick={() => addHashtag(item)}>
+                <div key={item.id}>
+                  <HashTag onClick={() => addHashtag(item)}>
                     {item.hashTagName}
                   </HashTag>
-                  {item.id < items.length - 1 && <span>|</span>}
+                  {item.id < items.length && <span>|</span>}
                 </div>
               ))}
             </SlideItem>
@@ -103,8 +91,6 @@ const TagSlide = ({items}) => {
         ))}
       </HashtagsContainer>
     }
-      
-      <HashtagBox tags={selectTags} removeTag={removeTag} />
     </div>
   );
 };
