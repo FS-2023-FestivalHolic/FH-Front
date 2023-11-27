@@ -26,25 +26,25 @@
 └─src
     ├─assets //이미지 파일 저장
     ├─components //재사용 가능한 컴포넌트 정의 
-    |   ├─ BeerItem
-    |   ├─ BeerSlide
-    |   ├─ BeerSlideMobile
-    |   ├─ HashtagBox
-    |   ├─ LikeDislikes
-    |   ├─ MobileMenu
-    |   ├─ RenderMap
-    |   ├─ TagSlide
-    |   └── UserBeerItem
-    |   
+    │   ├─ BeerItem
+    │   ├─ BeerSlide
+    │   ├─ BeerSlideMobile
+    │   ├─ HashtagBox
+    │   ├─ LikeDislikes
+    │   ├─ MobileMenu
+    │   ├─ RenderMap
+    │   ├─ TagSlide
+    │   └── UserBeerItem
+    │   
     ├─pages //라우팅을 적용할 때 페이지컴포넌트 정의
-    |   ├─ BeerTest
-    |   ├─ Detail
-    |   ├─ List
-    |   ├─ Login
-    |   ├─ Main
-    |   ├─ Register
-    |   ├─ User
-    |   └── index.js
+    │   ├─ BeerTest
+    │   ├─ Detail
+    │   ├─ List
+    │   ├─ Login
+    │   ├─ Main
+    │   ├─ Register
+    │   ├─ User
+    │   └── index.js
     ├─shared //공통 컴포넌트 정의 
     ├─style //스타일 정의
     ├── App.jsx
