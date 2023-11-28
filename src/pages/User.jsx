@@ -21,9 +21,9 @@ const User = () => {
         <Title>좋아요 목록</Title>
         <LikeList>
           {state.userData.beerList.map((beer, index) => (
-            <StyledLink to={`/beer/${beer.beerId}}`} key={index}>
-              <BeerItem item={beer} />
-            </StyledLink>
+            <Link Link to={`/beer/${beer.beerId}`} key={index} style={{ textDecoration: "none"}}>
+              <BeerItem item={beer}  key={index}/>
+            </Link>
           ))}    
         </LikeList>
       </RContainer>
@@ -35,10 +35,6 @@ const User = () => {
 const Wrapper = styled.div`
   margin: 0;
   color: #666666;
-`;
-
-const StyledLink = styled(Link)`
-  text-decoration: none;
 `;
 
 const Container = styled.div`
