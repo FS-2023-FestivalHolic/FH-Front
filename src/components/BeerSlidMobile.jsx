@@ -7,26 +7,29 @@ const BeerSlideMobile = ({items}) => {
   const containerRef = useRef(null);
   const [startX, setStartX] = useState(null);
   const [isDrag, setIsDrag] = useState(false);
-  
-  const onDragStart = e => {
-    e.preventDefault();
+
+  const onDragStart = (e) => {
     setIsDrag(true);
-    setStartX(e.pageX + containerRef.current.scrollLeft);
+    setStartX(e.touches ? e.touches[0].pageX + containerRef.current.scrollLeft : e.pageX + containerRef.current.scrollLeft);
   };
+
   const onDragEnd = () => {
     setIsDrag(false);
-  }
-  const onDragMove = e => {
-    if(isDrag) {
-      const {scrollWidth, clientWidth, scrollLeft} = containerRef.current;
-      containerRef.current.scrollLeft = startX - e.pageX;
-      if (scrollLeft === 0) {
-        setStartX(e.pageX); 
-      } else if (scrollWidth <= clientWidth + scrollLeft) {
-        setStartX(e.pageX + scrollLeft); 
+  };
+
+  const onDragMove = (e) => {
+    if (isDrag) {
+      const { scrollWidth, clientWidth, scrollLeft } = containerRef.current;
+      const pageX = e.touches ? e.touches[0].pageX : e.pageX;
+      containerRef.current.scrollLeft = startX - pageX;
+
+      if (scrollLeft === 0 && pageX > startX) {
+        setStartX(pageX);
+      } else if (scrollWidth <= clientWidth + scrollLeft && pageX < startX) {
+        setStartX(pageX + scrollLeft);
       }
     }
-  }
+  };
 
   const throttle = (func, ms) => {
     let throttled = false;
@@ -49,14 +52,14 @@ const BeerSlideMobile = ({items}) => {
       {items && (
         <SlideContainer
           ref={containerRef}
-          onMouseDown={onDragStart}
-          onMouseUp={onDragEnd}
-          onMouseLeave={onDragEnd}
-          onMouseMove={isDrag ? onThrottleDragMove : null}
+          onTouchStart={onDragStart}
+          onTouchEnd={onDragEnd}
+          onTouchMove={onThrottleDragMove}
+          passive={false}
         >
           <SlideItem>
             {items.map((item, index) => (
-              <Link to={`/beer/${item.beerId}`} key={index}  style={{ textDecoration: "none"}}>
+              <Link to={`/beer/${item.beerId}`} key={index} style={{ textDecoration: 'none' }}>
                 <BeerItem item={item} />
               </Link>
             ))}
@@ -68,16 +71,17 @@ const BeerSlideMobile = ({items}) => {
 };
 
 const SlideContainer = styled.div`
-  display: flex;
   overflow: hidden;
-  width: 390px; 
-  height: 220px;
-  margin-bottom: 20px;
+  white-space: nowrap;
+  cursor: grab;
+  touch-action: none;
 `;
 
 const SlideItem= styled.div`
   display: flex;
   gap: 5px;
+  outline: none;
+  white-space: normal;
 `;
 
 export default BeerSlideMobile; 

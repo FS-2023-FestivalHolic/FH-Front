@@ -19,27 +19,29 @@ const TagSlide = ({items, addHashtag}) => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
-  
-  // 태그 드래그
-  const onDragStart = e => {
-    e.preventDefault();
+
+  const onDragStart = (e) => {
     setIsDrag(true);
-    setStartX(e.pageX + containerRef.current.scrollLeft);
+    setStartX(e.touches ? e.touches[0].pageX + containerRef.current.scrollLeft : e.pageX + containerRef.current.scrollLeft);
   };
+
   const onDragEnd = () => {
     setIsDrag(false);
-  }
-  const onDragMove = e => {
-    if(isDrag) {
-      const {scrollWidth, clientWidth, scrollLeft} = containerRef.current;
-      containerRef.current.scrollLeft = startX - e.pageX;
-      if (scrollLeft === 0) {
-        setStartX(e.pageX); 
-      } else if (scrollWidth <= clientWidth + scrollLeft) {
-        setStartX(e.pageX + scrollLeft); 
+  };
+
+  const onDragMove = (e) => {
+    if (isDrag) {
+      const { scrollWidth, clientWidth, scrollLeft } = containerRef.current;
+      const pageX = e.touches ? e.touches[0].pageX : e.pageX;
+      containerRef.current.scrollLeft = startX - pageX;
+
+      if (scrollLeft === 0 && pageX > startX) {
+        setStartX(pageX);
+      } else if (scrollWidth <= clientWidth + scrollLeft && pageX < startX) {
+        setStartX(pageX + scrollLeft);
       }
     }
-  }
+  };
 
   const throttle = (func, ms) => {
     let throttled = false;
@@ -59,13 +61,12 @@ const TagSlide = ({items, addHashtag}) => {
 
   return (
     <div> {isMobile ? <>
-        {items && (
           <SlideContainer
             ref={containerRef}
-            onMouseDown={onDragStart}
-            onMouseUp={onDragEnd}
-            onMouseLeave={onDragEnd}
-            onMouseMove={isDrag ? onThrottleDragMove : null}
+            onTouchStart={onDragStart}
+            onTouchEnd={onDragEnd}
+            onTouchMove={onThrottleDragMove}
+            passive={false}
           >
             <SlideItem>
               {items.map((item, index) => (
@@ -78,7 +79,6 @@ const TagSlide = ({items, addHashtag}) => {
               ))}
             </SlideItem>
           </SlideContainer>
-        )} 
       </> : 
       <HashtagsContainer>
         {items.map((tag, index) => (
@@ -96,11 +96,10 @@ const TagSlide = ({items, addHashtag}) => {
 };
 
 const SlideContainer = styled.div`
-  display: flex;
   overflow: hidden;
-  width: 390px; 
-  margin-bottom: 20px;
   white-space: nowrap;
+  cursor: grab;
+  touch-action: none;
 `;
 
 const SlideItem= styled.div`
@@ -110,6 +109,7 @@ const SlideItem= styled.div`
   color: #666;
   font-size: 15px;
   font-weight: 400;
+  outline: none;
 `;
 
 const HashTag = styled.span`
