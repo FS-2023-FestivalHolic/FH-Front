@@ -32,7 +32,7 @@ const Container = styled.div`
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   border-radius: 5px 5px 0 0;
 
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     width: 178px;
     height: 218px;
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
@@ -46,7 +46,7 @@ const ImgContainer = styled.div`
   overflow: hidden;
   border-radius: 5px 5px 0 0;  
   
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     width: 178px;
     height: 155px;
     border-radius: 3.5px 3.5px 0 0;
@@ -63,7 +63,7 @@ const Description = styled.div`
   padding: 7px;
   gap: 7px;
 
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     padding: 0 10px;
     gap: 2px;
   }
@@ -73,7 +73,7 @@ const ItemName = styled.div`
   font-size: 15px;
   color: #000000;
 
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     font-size:13.5px;
   }
 `;
@@ -84,7 +84,7 @@ const ItemLikes = styled.div`
   align-items: center;
   color: #000000;
 
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     font-size:10px;
   }
 `;
@@ -99,7 +99,7 @@ const HashTags = styled.div`
   font-size: 11px;
   color: #666666;
 
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     font-size:7.5px;
   }
 `;

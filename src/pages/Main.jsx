@@ -62,15 +62,15 @@ const Wrapper = styled.div`
   max-width: 1075px;
   margin: 0 auto;
 
-  @media (max-width: 390px) {
-    max-width: 367px;
+  @media (max-width: 391px) {
+    max-width: 360px;
   }
 `;
 
 const MainBanner = styled.div`
   margin: 24px 0;
 
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     margin: 0 0 24px;
   }
 `;
@@ -79,7 +79,7 @@ const Container = styled.div`
   display: none;
   color: #212121;
 
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     display: block; 
     margin-bottom: 15px;
   }
@@ -88,7 +88,7 @@ const Container = styled.div`
 const Title = styled.div`
   display: none;
 
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     display: flex;
     font-size: 20px;
     font-weight: 700;
@@ -98,7 +98,7 @@ const Title = styled.div`
 const Text = styled.div`
   display: none;
 
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     display: flex;
     font-size: 14px;
     font-weight: 400;

@@ -143,7 +143,7 @@ const ItemContainer = styled.div`
   grid-gap: 9px;
   margin-bottom: 20px;
 
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     width: 370px;
     grid-template-columns: repeat(2,1fr);
     grid-gap: 8px;

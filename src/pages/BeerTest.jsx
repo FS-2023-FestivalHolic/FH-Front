@@ -27,7 +27,7 @@ function BeerTest() {
   // 모바일용일 때 이미지 전환
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 390);
+      setIsMobile(window.innerWidth <= 391);
     };
 
     window.addEventListener('resize', handleResize);
@@ -160,7 +160,7 @@ const StartContainer = styled.div`
   gap: 105px;
   margin: 0 auto;
 
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     max-width: 367px;
     height: 844px;
     margin-top: 10px;
@@ -171,7 +171,7 @@ const Text = styled.div`
   font-size: 36px;
   color: #666666;
 
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     font-size: 19px;
   }
 `;
@@ -188,7 +188,7 @@ const StartBtn = styled.button`
   margin-top: 350px;
   cursor: pointer;
 
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     width: 179px;
     hieght: 50px;
     font-size: 24px;
@@ -203,7 +203,7 @@ const QContainer = styled.div`
   flex-direction: column;
   margin-top: 50px;
 
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     max-width: 367px;
     height: 844px;
     margin-top: 10px;
@@ -213,7 +213,7 @@ const QContainer = styled.div`
 const Step = styled.div`
   font-size: 32px;
 
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     font-size: 20px;
     margin: 20px 0 10px;
   }
@@ -231,7 +231,7 @@ const QTitle = styled.div`
   font-size: 48px;
   margin-bottom: 50px;
 
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     font-size: 25px;
     margin-bottom: 60px;
   }
@@ -246,7 +246,7 @@ const QButton = styled.button`
   color: #FFFFFF;
   font-size: 36px;
 
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     max-width: 371px;
     height: 78px;
     font-size: 24px;
@@ -259,7 +259,7 @@ const ResultContainer = styled.div`
   align-items: center;
   margin: 50px auto 0;
 
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     max-width: 390px;
     margin: 0 auto;
   }
@@ -269,14 +269,14 @@ const BeerTitle = styled.div`
   font-size: 64px;
   margin-bottom: 40px;
 
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     font-size: 26px; 
     margin-bottom: 20px;
   }
 `;
 
 const BeerImg = styled.img`
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     width: 160px;
     height: 200px;
   }
@@ -287,7 +287,7 @@ const ShareTxt = styled.div`
   font-weight: 600;
   margin: 40px 0;
 
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     font-size: 13px;
     margin: 20px 0;
   }
@@ -297,13 +297,13 @@ const Share = styled.div`
   display: flex;
   gap: 150px;
 
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     gap: 55px;
   }
 `
 
 const Img = styled.img`
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     width: 46px;
     height: 46px;
   }
@@ -313,7 +313,7 @@ const Hr = styled.hr`
   width: 1136px;
   margin: 40px 0;
 
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     width: 100%;
     margin: 20px 0;
   }
@@ -325,7 +325,7 @@ const Description = styled.div`
   gap: 50px;
   margin-bottom: 50px;
 
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     max-width: 367px;
     gap: 30px;
   }
@@ -335,7 +335,7 @@ const DTitle = styled.div`
   font-size: 28px;
   color: #383838;
 
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     font-size: 19px;
   }
 `;
@@ -345,7 +345,7 @@ const DContent = styled.div`
   color: #666666;
   font-size: 28px;
 
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     width: 367px;
     font-size: 20px;
   }
@@ -356,7 +356,7 @@ const RTitle = styled.div`
   color: #7A7A7A;
   font-size: 32px;
 
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     max-width: 367px;
     font-size: 18px;
   }
@@ -368,7 +368,7 @@ const RText =  styled.div`
   font-size: 24px;
   margin: 10px 0 40px;
 
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     max-width: 367px;
     font-size: 15px;
   }

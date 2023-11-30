@@ -22,7 +22,7 @@ const Nav = styled.nav`
   justify-content: flex-start;
   gap: 20px;
 
-  @media (max-width: 390px) { 
+  @media (max-width: 391px) { 
     padding: 10px 0;
   }
 `;
@@ -43,7 +43,7 @@ const StyledLink = styled(NavLink)`
     text-decoration: underline;
   }
   
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     ${({ isActive }) => !isActive && `
       display: none;
     `}

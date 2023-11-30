@@ -48,7 +48,7 @@ const Title = styled.div`
   padding: 5px 0;
   margin: 10px 0;
 
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     width: 370px;
     font-size: 20px;
     padding: 2px 0;
@@ -65,7 +65,7 @@ const TopSection = styled.div`
   align-items: center;
   margin: 30px 0;
 
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     height: 84px;
     padding: 16px;
     margin: 32px 0;
@@ -76,7 +76,7 @@ const UserContent = styled.div`
   font-size: 40px;
   align-items: baseline;
 
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     font-size: 15px;
   }
 `;
@@ -89,7 +89,7 @@ const LikeList = styled.div`
   grid-gap: 11px;
   margin: 20px 0;
 
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     width: 370px;
     display: grid;
     grid-template-columns: repeat(2,1fr);
@@ -105,14 +105,14 @@ const Name = styled.span`
   color: #7A7A7A;
   margin-right: 30px;
 
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     font-size: 24px;
     margin-right: 12px;
   }
 `;
 
 const RContainer = styled(Container)`
-  @media (max-width: 390px) {
+  @media (max-width: 391px) {
     width: 100%;
   }
 
